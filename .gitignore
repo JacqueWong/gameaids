@@ -1,0 +1,6 @@
+# dxcb2 .gitignore
+# all files under the directory: /bin /config /docs /Logs /static (*/.gitignore)
+/venv/
+setup.*
+.idea/
+*/__pycache__
