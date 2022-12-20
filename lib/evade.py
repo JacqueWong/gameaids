@@ -14,6 +14,11 @@ from time import sleep
 
 
 def random_coordinates(position: list):
+    """
+    Returns random coordinates within a range
+
+    :return: coordination_x, coordination_y
+    """
     coordination_x = random.uniform(position[0][0] + 1, position[1][0] - 1)
     coordination_y = random.uniform(position[0][1] + 1, position[1][1] - 1)
     return int(coordination_x), int(coordination_y)

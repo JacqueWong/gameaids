@@ -14,6 +14,9 @@ from lib.evade import *
 
 
 def __ensure_matching(position, template, confidence=25):
+    """
+    Determine how similar the target is to the template
+    """
     # region value about (left, top, width , height)
     temp = pag.screenshot(region=(position[0][0], position[0][1],
                                   position[1][0] - position[0][0],
@@ -26,7 +29,14 @@ def __ensure_matching(position, template, confidence=25):
         return True
 
 
-def click_target_position(template: str, click_times=1):
+def ctp(template: str, click_times=1):
+    """
+    click target position
+
+    :param template: src file path
+    :param click_times: zero->target does not have to appear
+
+    """
     # The number of times is used as the criterion for judging whether the click target will appear,
     # that is, 0 means that it may seem, and non-0 means that it will appear
     target = "../static/screenshot.png"
@@ -52,13 +62,25 @@ def click_target_position(template: str, click_times=1):
             if click_times == 0:
                 click_times = click_times + 1
         # click_times must be greater than 0,I'm sure!!!
-        pag.click(random_coordinates(position=position), clicks=click_times)
-        # print("click: " + template)
+        pag.click(random_coordinates(position), clicks=click_times)
+        print('click : ' + template)
+        # TODO write json file? Complete control process
+        # action list , about count/index/steps,click/drag button name/icon,times/length,range,mark
+        # action = [1, 'click', 'tavern_button', 1, [0, 0, 1, 1], 'Enter the tavern']
+        # maybe dict better than list
+        # action = {
+        #     'step': 1,
+        #     'event': 'click',
+        #     'target': 'tavern_button',
+        #     'parameter': 1,
+        #     'evade': 10,
+        #     'remarks': 'Enter the tavern'
+        # }
         return True
 
 
 def full_mode():
-    random_sleep(8)
-    # pag.getActiveWindow()
+    random_sleep(10)
+    pag.getActiveWindow()
     pag.press('F11')
     print("press F11")

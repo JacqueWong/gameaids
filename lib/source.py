@@ -3,7 +3,7 @@
 # @Time    : 2022/11/30 10:20
 # @Author  : Jacque
 # @Site    : 
-# @File    : source.py
+# @File    : src.py
 # @Software: PyCharm
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
 # @Desc    :
@@ -20,6 +20,19 @@ def files_list_to_json(root, files: list):
     return json_dict
 
 
+def record_source(temp_dict, ret):
+    for key, value in dict.items(temp_dict):
+        ret.append(key)
+        if type(value) is dict:
+            record_source(value, ret)
+
+
+def fill_source_list(source_dict):
+    ret = []
+    record_source(source_dict, ret)
+    return ret
+
+
 class Source:
     def __init__(self):
         self.base_dict = {
@@ -31,10 +44,16 @@ class Source:
         self.source_root = '..\\static'
         self.source_path = '..\\config\\source.json'
         self.source_dict = json.load(fp=open(self.source_path, mode='r'))
-        self.source_list = []
-        self.__fill_source_list()
+        self.source_list = fill_source_list(self.source_dict)
 
     def update_source(self, folder_path: str = None):
+        """
+        source folder -> source.json
+
+        :param folder_path: default is static/
+
+        Raises: default save at config/source.json
+        """
         if folder_path is None:
             folder_path = self.source_root
         if not os.path.isdir(folder_path):
@@ -63,31 +82,26 @@ class Source:
         res_dict.update(image_path)
         json.dump(res_dict, fp=open(self.source_path, mode='w'), indent=4)
 
-    def get_all_source(self):
+    def get_all_src(self):
         return self.source_dict
 
-    def get_source(self, name: str = None):
+    def get(self, name: str = None):
+        """
+        get source by name from source json
+        """
         if not name:
             return False
         if name not in self.source_list:
             return False
-        return self.__find_source(self.source_dict, name)
+        return self.__find_src(self.source_dict, name)
 
-    def __find_source(self, temp_dict, name):
+    def __find_src(self, temp_dict, name):
         target_key = None
         for key, value in dict.items(temp_dict):
             if key == name:
+                print(value)
                 return value
             if type(value) is dict and list.index(self.source_list, key) < list.index(self.source_list, name):
                 target_key = key
-        return self.__find_source(temp_dict[target_key], name)
-
-    def __fill_source_list(self):
-        return self.__record_source(self.source_dict)
-
-    def __record_source(self, temp_dict):
-        for key, value in dict.items(temp_dict):
-            self.source_list.append(key)
-            if type(value) is dict:
-                self.__record_source(value)
+        return self.__find_src(temp_dict[target_key], name)
 

@@ -15,41 +15,25 @@ from PIL.Image import Resampling
 
 
 def matching_picture(template_path: str, target_path: str):
-    methods = [cv.TM_SQDIFF, cv.TM_CCORR, cv.TM_CCOEFF]
-    methods_normed = [cv.TM_SQDIFF_NORMED, cv.TM_CCORR_NORMED, cv.TM_CCOEFF_NORMED]
+    """
+    Returns the location of the area in the target image that most closely resembles the template
+    """
 
-    method = methods[2]
-
-    template = cv.imdecode(np.fromfile(template_path, dtype=np.uint8), 1)
+    method = cv.TM_CCOEFF
     target = cv.imdecode(np.fromfile(target_path, dtype=np.uint8), 1)
+    template = cv.imdecode(np.fromfile(template_path, dtype=np.uint8), 1)
 
-    if template is None or target is None or method is None:
-        print(f"set template and target picture or set method first please .. \n"
-              # f"template : {template}\n"
-              # f"target : {target}\n"
-              # f"method : {method}"
-              )
+    th, tw = template.shape[:2]
+    result = cv.matchTemplate(target, template, method)
+    min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
+    if method == cv.TM_SQDIFF_NORMED:
+        tl = min_loc
     else:
-        th, tw = template.shape[:2]
-        result = cv.matchTemplate(target, template, method)
-        min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
-        if method == methods_normed[0]:
-            tl = min_loc
-        else:
-            tl = max_loc
-        br = (tl[0] + tw, tl[1] + th)  # br是矩形右下角的点的坐标
-        # print(f"tl : {tl}")
-        # print(f"br : {br}")
-        # cv.putText(
-        #     target, str([tl[0] + (tw / 2), br[1]]), tl, cv.FONT_HERSHEY_SIMPLEX, 2, (98, 170, 255), 2)
-        # cv.rectangle(target, tl, br, (0, 255, 0), 2)
-        # img = target[:tl[1] + th, :]
-        # cv.namedWindow("match", cv.WINDOW_NORMAL)
-        # cv.imshow("match", target)
-        # cv.waitKey(0)
-        # cv.destroyAllWindows()
-        # print(tl, br)
-        return [tl, br]
+        tl = max_loc
+    # br is the coordinate of the point in the lower-right corner of the rectangle
+    br = (tl[0] + tw, tl[1] + th)
+
+    return [tl, br]
 
 
 # The mean hash algorithm is used to calculate the similarity
@@ -70,7 +54,7 @@ def get_hash(img):
         img = Image.open(img)
     # img.show()
     img = img.resize((16, 16), Resampling.LANCZOS).convert('L')  # Anti aliasing Grayscale
-    avg = sum(list(img.getdata())) / 256  # 计算像素平均值
+    avg = sum(list(img.getdata())) / 256  # Calculate the pixel average
     s = ''.join(map(lambda i: '0' if i < avg else '1', img.getdata()))  # For each pixel,
     # the value greater than AVG is 1, otherwise it is 0
     return ''.join(map(lambda j: '%x' % int(s[j:j + 4], 2), range(0, 256, 4)))
