@@ -41,10 +41,10 @@ class Resource:
             "root": "static/",
             "screenshot": "screenshot.png",
         }
-        self.source_root = '..\\static'
-        self.source_path = '..\\config\\source.json'
-        self.source_dict = json.load(fp=open(self.source_path, mode='r'))
-        self.source_list = fill_source_list(self.source_dict)
+        self.res_root = '..\\static'
+        self.res_path = '..\\config\\source.json'
+        self.res_dict = json.load(fp=open(self.res_path, mode='r'))
+        self.res_list = fill_source_list(self.res_dict)
 
     def update_source(self, folder_path: str = None):
         """
@@ -55,7 +55,7 @@ class Resource:
         Raises: default save at config/source.json
         """
         if folder_path is None:
-            folder_path = self.source_root
+            folder_path = self.res_root
         if not os.path.isdir(folder_path):
             print("folder<" + folder_path + "> does not exist")
             exit(1)
@@ -80,10 +80,10 @@ class Resource:
                     image_path[key] = files_list_to_json(root, files)
         res_dict = self.base_dict
         res_dict.update(image_path)
-        json.dump(res_dict, fp=open(self.source_path, mode='w'), indent=4)
+        json.dump(res_dict, fp=open(self.res_path, mode='w'), indent=4)
 
     def get_all_res(self):
-        return self.source_dict
+        return self.res_dict
 
     def get(self, name: str = None):
         """
@@ -91,9 +91,9 @@ class Resource:
         """
         if not name:
             return False
-        if name not in self.source_list:
+        if name not in self.res_list:
             return False
-        return self.__find_res(self.source_dict, name)
+        return self.__find_res(self.res_dict, name)
 
     def __find_res(self, temp_dict, name):
         target_key = None
@@ -101,7 +101,6 @@ class Resource:
             if key == name:
                 print(value)
                 return value
-            if type(value) is dict and list.index(self.source_list, key) < list.index(self.source_list, name):
+            if type(value) is dict and list.index(self.res_list, key) < list.index(self.res_list, name):
                 target_key = key
         return self.__find_res(temp_dict[target_key], name)
-
