@@ -6,9 +6,21 @@
 # @File    : main.py
 # @Software: PyCharm
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
-# from lib import *
+
+
 from src import *
-from lib import *
+import subprocess
+
+
+def check_network():
+    ret = subprocess.run("ping baidu.com -n 1",
+                         shell=True,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    if ret.returncode:
+        log.error('network return code <' + str(ret.returncode) + '> connect failed.')
+    else:
+        log.info('connect success.')
 
 
 def load_process(temp: dict):
@@ -48,26 +60,30 @@ def initialize():
         exit(3)
 
 
-def start_work(conf):
-    print(config)
-    print(conf)
+def start_work(work_dict):
+    print(work_dict)
+    # Config().record_config(record)
+    for key, value in dict.items(work_dict):
+        if value == 'on':
+            exec('proc.' + key + '()')
 
 
 if __name__ == "__main__":
     log = CustomLog().custom_log(level=logging.DEBUG)
-    config, app_path = initialize()
-    process_list = load_process(config)
+    conf, app_path = initialize()
+    check_network()
+    load_process(conf)
 
     # ca = ControlApp(app_path)
-    # game = Game()
+    proc = Process()
     # log.info("open application.")
     # ca.open_app()
     # log.info("open game.")
-    # game.open_game()
-
-    start_work(process_list)
+    # proc.open_game()
+    # log.info("start")
+    # log.info("start work")
+    # start_work(conf)
 
     # ca.close_app()
     # log.debug("close application")
     log.info("test main function finish.")
-
