@@ -33,7 +33,7 @@ def ctp(template: str, click_times=1):
     """
     click target position
 
-    :param template: src file path
+    :param template: res file path
     :param click_times: zero->target does not have to appear
 
     """

@@ -3,7 +3,7 @@
 # @Time    : 2022/11/30 10:20
 # @Author  : Jacque
 # @Site    : 
-# @File    : src.py
+# @File    : res.py
 # @Software: PyCharm
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
 # @Desc    :
@@ -33,7 +33,7 @@ def fill_source_list(source_dict):
     return ret
 
 
-class Source:
+class Resource:
     def __init__(self):
         self.base_dict = {
             "name": "Image_path",
@@ -82,7 +82,7 @@ class Source:
         res_dict.update(image_path)
         json.dump(res_dict, fp=open(self.source_path, mode='w'), indent=4)
 
-    def get_all_src(self):
+    def get_all_res(self):
         return self.source_dict
 
     def get(self, name: str = None):
@@ -93,9 +93,9 @@ class Source:
             return False
         if name not in self.source_list:
             return False
-        return self.__find_src(self.source_dict, name)
+        return self.__find_res(self.source_dict, name)
 
-    def __find_src(self, temp_dict, name):
+    def __find_res(self, temp_dict, name):
         target_key = None
         for key, value in dict.items(temp_dict):
             if key == name:
@@ -103,5 +103,5 @@ class Source:
                 return value
             if type(value) is dict and list.index(self.source_list, key) < list.index(self.source_list, name):
                 target_key = key
-        return self.__find_src(temp_dict[target_key], name)
+        return self.__find_res(temp_dict[target_key], name)
 

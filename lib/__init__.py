@@ -10,7 +10,7 @@
 from lib.control import *
 from lib.custom_log import *
 from lib.config import *
-from lib.source import *
+from lib.resource import *
 from lib.auto import *
 from lib.evade import *
 
