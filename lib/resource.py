@@ -20,16 +20,16 @@ def files_list_to_json(root, files: list):
     return json_dict
 
 
-def record_source(temp_dict, ret):
+def record_res(temp_dict, ret):
     for key, value in dict.items(temp_dict):
         ret.append(key)
         if type(value) is dict:
-            record_source(value, ret)
+            record_res(value, ret)
 
 
-def fill_source_list(source_dict):
+def fill_res_list(source_dict):
     ret = []
-    record_source(source_dict, ret)
+    record_res(source_dict, ret)
     return ret
 
 
@@ -44,11 +44,11 @@ class Resource:
         self.res_root = '..\\static'
         self.res_path = '..\\config\\source.json'
         self.res_dict = json.load(fp=open(self.res_path, mode='r'))
-        self.res_list = fill_source_list(self.res_dict)
+        self.res_list = fill_res_list(self.res_dict)
 
-    def update_source(self, folder_path: str = None):
+    def update_res(self, folder_path: str = None):
         """
-        source folder -> source.json
+        resource folder -> source.json
 
         :param folder_path: default is static/
 
