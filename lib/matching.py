@@ -14,17 +14,17 @@ from PIL import Image
 from PIL.Image import Resampling
 
 
-def matching_picture(template_path: str, target_path: str):
+def matching_picture(template_path: str, screenshot_path: str):
     """
     Returns the location of the area in the target image that most closely resembles the template
     """
 
     method = cv.TM_CCOEFF
-    target = cv.imdecode(np.fromfile(target_path, dtype=np.uint8), 1)
+    screenshot = cv.imdecode(np.fromfile(screenshot_path, dtype=np.uint8), 1)
     template = cv.imdecode(np.fromfile(template_path, dtype=np.uint8), 1)
 
     th, tw = template.shape[:2]
-    result = cv.matchTemplate(target, template, method)
+    result = cv.matchTemplate(screenshot, template, method)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
     if method == cv.TM_SQDIFF_NORMED:
         tl = min_loc
@@ -58,3 +58,15 @@ def get_hash(img):
     s = ''.join(map(lambda i: '0' if i < avg else '1', img.getdata()))  # For each pixel,
     # the value greater than AVG is 1, otherwise it is 0
     return ''.join(map(lambda j: '%x' % int(s[j:j + 4], 2), range(0, 256, 4)))
+
+
+def ensure_matching(temp, template, confidence=25):
+    """
+    Determine how similar the target is to the template
+    """
+    ret = calculate_distance(template, temp)
+    # print('confidence : ' + str(ret))
+    if ret > confidence:
+        return False
+    else:
+        return True

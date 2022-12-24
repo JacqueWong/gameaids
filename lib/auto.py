@@ -13,22 +13,6 @@ from lib.matching import *
 from lib.evade import *
 
 
-def __ensure_matching(position, template, confidence=25):
-    """
-    Determine how similar the target is to the template
-    """
-    # region value about (left, top, width , height)
-    temp = pag.screenshot(region=(position[0][0], position[0][1],
-                                  position[1][0] - position[0][0],
-                                  position[1][1] - position[0][1]))
-    ret = calculate_distance(template, temp)
-    # print('confidence : ' + str(ret))
-    if ret > confidence:
-        return False
-    else:
-        return True
-
-
 def ctp(template: str, click_times=1):
     """
     click target position
@@ -39,7 +23,8 @@ def ctp(template: str, click_times=1):
     """
     # The number of times is used as the criterion for judging whether the click target will appear,
     # that is, 0 means that it may seem, and non-0 means that it will appear
-    target = "../static/screenshot.png"
+    screenshot_path = "../static/screenshot.png"
+    target_path = "../static/target.png"
     # If more than 10 times, the judgment target will not appear?
     count = 10
     # while count:
@@ -47,9 +32,14 @@ def ctp(template: str, click_times=1):
         count = count - 1
         random_sleep()
         screenshot = pag.screenshot()
-        screenshot.save(target)
-        position = matching_picture(template, target)
-        if __ensure_matching(position, template) is False:
+        screenshot.save(screenshot_path)
+        position = matching_picture(template, screenshot_path)
+        # region value about (left, top, width , height)
+        target = pag.screenshot(region=(position[0][0], position[0][1],
+                                        position[1][0] - position[0][0],
+                                        position[1][1] - position[0][1]))
+        target.save(target_path)
+        if ensure_matching(target, template) is False:
             if click_times == 0 and count < 0:
                 return False
             elif count < 0:
