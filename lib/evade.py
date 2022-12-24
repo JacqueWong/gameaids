@@ -19,8 +19,13 @@ def random_coordinates(position: list):
 
     :return: coordination_x, coordination_y
     """
-    coordination_x = random.uniform(position[0][0] + 1, position[1][0] - 1)
-    coordination_y = random.uniform(position[0][1] + 1, position[1][1] - 1)
+    # evade_value
+    ev = 1
+    if position[1][1] - position[0][1] > 100 and \
+            position[1][0] - position[0][0] > 100:
+        ev = 25
+    coordination_x = random.uniform(position[0][0] + ev, position[1][0] - ev)
+    coordination_y = random.uniform(position[0][1] + ev, position[1][1] - ev)
     return int(coordination_x), int(coordination_y)
 
 
