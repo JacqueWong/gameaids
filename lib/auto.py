@@ -13,10 +13,11 @@ from lib.matching import *
 from lib.evade import *
 
 
-def ctp(template: str, click_times=1):
+def ctp(template: str, click_times=1, drag=False):
     """
     click target position
 
+    :param drag:
     :param template: res file path
     :param click_times: zero->target does not have to appear
 
@@ -52,8 +53,13 @@ def ctp(template: str, click_times=1):
             if click_times == 0:
                 click_times = click_times + 1
         # click_times must be greater than 0,I'm sure!!!
-        pag.click(random_coordinates(position), clicks=click_times)
-        print('click : ' + template)
+
+        if drag:
+            pag.moveTo(random_coordinates(position))
+            mouse_drag()
+        else:
+            pag.click(random_coordinates(position), clicks=click_times)
+            print('click : ' + template)
         # TODO write json file? Complete control process
         # action list , about count/index/steps,click/drag button name/icon,times/length,range,mark
         # action = [1, 'click', 'tavern_button', 1, [0, 0, 1, 1], 'Enter the tavern']
@@ -67,6 +73,16 @@ def ctp(template: str, click_times=1):
         #     'remarks': 'Enter the tavern'
         # }
         return True
+
+
+def mouse_drag(mode='page', index=100):
+    sleep(2)
+    if mode == 'page':
+        pag.dragRel(xOffset=index, yOffset=0, duration=0.25)
+    elif mode == 'btn':
+        pass
+    else:
+        pass
 
 
 def full_mode():
