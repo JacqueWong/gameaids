@@ -65,7 +65,7 @@ def ensure_matching(temp, template, confidence=25):
     Determine how similar the target is to the template
     """
     ret = calculate_distance(template, temp)
-    # print('confidence : ' + str(ret))
+    print('confidence : ' + str(ret))
     if ret > confidence:
         return False
     else:
