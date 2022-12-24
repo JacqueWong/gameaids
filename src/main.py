@@ -13,7 +13,7 @@ import subprocess
 
 
 def check_network():
-    ret = subprocess.run("ping baidu.com -n 1",
+    ret = subprocess.run("ping github.com -n 1",
                          shell=True,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
@@ -61,10 +61,11 @@ def initialize():
 
 
 def start_work(work_dict):
-    print(work_dict)
+    # print(work_dict)
     # Config().record_config(record)
     for key, value in dict.items(work_dict):
         if value == 'on':
+            print('proc.' + key + '()')
             exec('proc.' + key + '()')
 
 
@@ -74,13 +75,12 @@ if __name__ == "__main__":
     check_network()
     load_process(conf)
 
-    # ca = ControlApp(app_path)
     proc = Process()
-    # log.info("open application.")
-    # ca.open_app()
-    # log.info("open game.")
-    # proc.open_game()
-    # log.info("start")
+    ca = ControlApp(app_path)
+    ca.open_app()
+    log.info("open application.")
+    proc.open_game()
+    log.info("open game.")
     # log.info("start work")
     # start_work(conf)
 
