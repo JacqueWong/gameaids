@@ -13,14 +13,17 @@ from lib.matching import *
 from lib.evade import *
 
 
-def ctp(template: str, click_times=1, drag=False):
+def mtp(template: str, action=1):
     """
-    click target position
+    match target position, default click
 
-    :param drag:
     :param template: res file path
-    :param click_times: zero->target does not have to appear
+    :param action: action after successful matching
 
+    Raises:
+        action > 1  -> click times                \n
+        action = 0  -> if target appears, click   \n
+        action = -1 -> target need to drag        \n
     """
     # The number of times is used as the criterion for judging whether the click target will appear,
     # that is, 0 means that it may seem, and non-0 means that it will appear
@@ -41,7 +44,7 @@ def ctp(template: str, click_times=1, drag=False):
                                         position[1][1] - position[0][1]))
         target.save(target_path)
         if ensure_matching(target, template) is False:
-            if click_times == 0 and count < 0:
+            if action == 0 and count < 0:
                 return False
             elif count < 0:
                 exit(10)
@@ -50,17 +53,14 @@ def ctp(template: str, click_times=1, drag=False):
                 count = count - 2
                 continue
         else:
-            if click_times == 0:
-                click_times = click_times + 1
-        # click_times must be greater than 0,I'm sure!!!
-
-        if drag:
+            if action == 0:
+                action = action + 1
+        if action == -1:
             pag.moveTo(random_coordinates(position))
-            mouse_drag()
         else:
-            pag.click(random_coordinates(position), clicks=click_times)
+            pag.click(random_coordinates(position), clicks=action)
             print('click : ' + template)
-        # TODO write json file? Complete control process
+        # TODO write json file? record control process
         # action list , about count/index/steps,click/drag button name/icon,times/length,range,mark
         # action = [1, 'click', 'tavern_button', 1, [0, 0, 1, 1], 'Enter the tavern']
         # maybe dict better than list
@@ -75,18 +75,25 @@ def ctp(template: str, click_times=1, drag=False):
         return True
 
 
-def mouse_drag(mode='page', index=100):
+def md(mode: str = None, index: list = None):
+    """
+    mouse drag
+    """
     sleep(2)
-    if mode == 'page':
-        pag.dragRel(xOffset=index, yOffset=0, duration=0.25)
+    if mode == 'page_left':
+        pag.dragRel(xOffset=75, yOffset=0, duration=0.25)
+    elif mode == 'page_right':
+        pag.dragRel(xOffset=-75, yOffset=0, duration=0.25)
     elif mode == 'btn':
-        pass
+        index[0] = 200
+        pag.dragRel(xOffset=200, yOffset=0, duration=0.25)
     else:
-        pass
+        if not index:
+            pag.dragRel(xOffset=index[0], yOffset=index[1], duration=index[2])
 
 
 def full_mode():
     random_sleep(10)
     pag.getActiveWindow()
     pag.press('F11')
-    print("press F11")
+    # print("press F11")
