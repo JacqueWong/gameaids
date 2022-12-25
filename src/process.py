@@ -11,112 +11,110 @@
 from lib import *
 
 
-# TODO All functions need to be tested, and the logic is not yet perfect.
-#  It also needs to be optimized, using the [map] function
+# TODO All functions need to be optimized, using the [map] function
 class Process:
     def __init__(self):
         self.res = Resource()
 
     def test(self):
-        ctp(self.res.get('expedition'), drag=True)
-
-    def main_page_drag(self):
-        # TODO Next task
-        pass
+        mtp(self.res.get('expedition_button'), action=-1)
+        md(mode='page_right')
 
     def open_game(self):
         full_mode()
         temp = ['game_icon', 'update_OK', 'start_page', 'collapse_drop_down_box']
-        var = map(ctp, list(map(self.res.get, temp)), [1, 0, 0, 1])
-        print(list(var))
+        _ = map(mtp, list(map(self.res.get, temp)), [1, 0, 0, 1])
 
     def gains_crucible(self):
-        # print('function gains_crucible')
-        ctp(self.res.get('crucible'))
+        mtp(self.res.get('crucible'))
 
     def gains_hourglass(self):
-        print('function gains_hourglass')
-        ctp(self.res.get('ok'))
+        mtp(self.res.get('ok'))
 
     def gains_arena(self):
-        print('function gains_arena')
-        ctp(self.res.get('arena_button'))
+        temp = ['arena_button']
         count = 3
         while count:
-            ctp(self.res.get('reduce_times'))
-            ctp(self.res.get('ok'))
             count = count - 1
-        ctp(self.res.get('daily_rewards'))
-        ctp(self.res.get('leave_4'))
+            temp.extend(['reduce_times', 'ok'])
+        temp.extend(['daily_rewards', 'leave_4'])
+        temp_list = [1] * len(temp)
+        _ = map(mtp, list(map(self.res.get, temp)), temp_list)
 
     def venture(self):
+        mtp(self.res.get('expedition_button'), action=-1)
+        md(mode='page_left')
         self.receive_proceeds()
-        # TODO page need Move horizontally
         self.disassemble_equipment()
-        # TODO page need Move horizontally
         self.start_venture()
 
     def start_venture(self):
         suit = ['suit_one', 'suit_two', 'suit_three']
         team = ['team_one', 'team_two', 'team_three']
+        temp = []
         count = 0
         while count < 2:
-            ctp(self.res.get('tavern_button'))
-            ctp(self.res.get('suit'))
-            ctp(self.res.get(suit[count]))
-            # ctp(self.res.get('ok'), 0)
-            ctp(self.res.get('close'))
-            ctp(self.res.get('leave_3'))
-            ctp(self.res.get('expedition_button'))
-            ctp(self.res.get(team[count]))
-            ctp(self.res.get('venture_button'))
-            ctp(self.res.get('sign_deed'))
-            # TODO btn need Move horizontally
-            ctp(self.res.get('duration_button'))
-            ctp(self.res.get('start_task'))
-            ctp(self.res.get('leave_2'))
-            ctp(self.res.get('leave_3'))
+            temp.extend(['tavern_button', 'suit', suit[count], 'close',
+                         'leave_3', 'expedition_button', team[count],
+                         'venture_button', 'sign_deed'])
+            temp_list = [1] * len(temp)
+            _ = map(mtp, list(map(self.res.get, temp)), temp_list)
+            mtp(self.res.get('duration_button'), action=-1)
+            md(mode='btn')
+            temp = []
+            temp.extend(['start_task', 'leave_2', 'leave_3'])
+            temp_list = [1] * len(temp)
+            _ = map(mtp, list(map(self.res.get, temp)), temp_list)
             count = count + 1
 
     def receive_proceeds(self):
-        ctp(self.res.get('expedition_button'))
-        ctp(self.res.get('venture_finish'))
+        temp = ['expedition_button', 'venture_finish']
         count = 3
         while count:
             count = count - 1
-            ctp(self.res.get('receive'))
-            ctp(self.res.get('receive_and_leave'))
-        # TODO leave btn need
+            temp.extend(['receive', 'receive_and_leave'])
+        temp.append('leave_3')
+        temp_list = [1] * len(temp)
+        _ = map(mtp, list(map(self.res.get, temp)), temp_list)
 
     def disassemble_equipment(self):
-        ctp(self.res.get('warehouse_button'))
-        ctp(self.res.get('equip'))
-        ctp(self.res.get('Batch decomposition'))
-        ctp(self.res.get('decompose_purple_gear'))
-        ctp(self.res.get('ok'))
-        ctp(self.res.get('leave_2'))
+        temp = ['warehouse_button', 'equip', 'batch_decomposition', 'decompose_purple_gear', 'ok', 'leave_2']
+        temp_list = [1] * len(temp)
+        _ = map(mtp, list(map(self.res.get, temp)), temp_list)
 
     def manor_double_benefit(self):
-        ctp(self.res.get('manor_button'))
+        mtp(self.res.get('expedition_button'), action=-1)
+        md(mode='page_right')
+        md(mode='page_right')
+        mtp(self.res.get('manor_button'))
         count = 5
         while count:
             count = count - 1
-            ctp(self.res.get('double_benefits'))
-            ctp(self.res.get('ok'))
-        ctp(self.res.get('leave_3'))
+            mtp(self.res.get('double_benefits'))
+            mtp(self.res.get('ok'))
+        mtp(self.res.get('leave_3'))
+        mtp(self.res.get('manor_button'), action=-1)
+        md(mode='page_left')
+        md(mode='page_left')
 
     def church_personal_tasks(self):
-        ctp(self.res.get('church_button'))
-        ctp(self.res.get('parthenon'))
-        ctp(self.res.get('personal_tasks'))
+        temp = ['church_button', 'parthenon', 'personal_tasks']
         count = 3
         while count:
             count = count - 1
-            ctp(self.res.get('ads_icon'))
-        ctp(self.res.get('leave_4'))
+            temp.append('ads_icon')
+        temp.append('leave_4')
+        temp_list = [1] * len(temp)
+        _ = map(mtp, list(map(self.res.get, temp)), temp_list)
 
     def market_automatic_purchases(self):
-        # TODO use ocr will better
+        # TODO use ocr will be better?
+        pass
+
+    def submissions(self):
+        pass
+
+    def login(self):
         pass
 
 

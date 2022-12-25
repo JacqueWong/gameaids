@@ -13,12 +13,13 @@ import subprocess
 
 
 def check_network():
-    ret = subprocess.run("ping github.com -n 1",
+    ret = subprocess.run("ping baidu.com -n 1",
                          shell=True,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
     if ret.returncode:
         log.error('network return code <' + str(ret.returncode) + '> connect failed.')
+        exit(4)
     else:
         log.info('connect success.')
 
