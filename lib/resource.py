@@ -40,9 +40,11 @@ class Resource:
             "flag": True,
             "root": "static/",
             "screenshot": "screenshot.png",
+            "target": "target.png",
         }
         self.res_root = '..\\static'
         self.res_path = '..\\config\\source.json'
+        self.update_res()
         self.res_dict = json.load(fp=open(self.res_path, mode='r'))
         self.res_list = fill_res_list(self.res_dict)
 
