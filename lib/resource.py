@@ -9,6 +9,7 @@
 # @Desc    :
 import json
 import os
+import sys
 
 
 def files_list_to_json(root, files: list):
@@ -60,7 +61,7 @@ class Resource:
             folder_path = self.res_root
         if not os.path.isdir(folder_path):
             print("folder<" + folder_path + "> does not exist")
-            exit(1)
+            sys.exit(1)
         image_path = {}
         temp_dict = {}
         flag = None
@@ -102,7 +103,7 @@ class Resource:
         target_key = None
         for key, value in dict.items(temp_dict):
             if key == name:
-                print(value)
+                # print(value)
                 return value
             if type(value) is dict and list.index(self.res_list, key) < list.index(self.res_list, name):
                 target_key = key

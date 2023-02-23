@@ -19,7 +19,7 @@ def check_network():
                          stderr=subprocess.PIPE)
     if ret.returncode:
         log.error('network return code <' + str(ret.returncode) + '> connect failed.')
-        exit(4)
+        sys.exit(4)
     else:
         log.info('connect network success.')
 
@@ -51,14 +51,14 @@ def initialize():
                     log.info("Validation succeeded.")
             else:
                 log.error("Validation failed.File<config.ini>[Author].")
-                exit(2)
+                sys.exit(2)
         process_config: dict = default_conf['PROCESS']
         # time_conf: dict = default_conf['TIME']
         # process_config.update(time_conf)
         return process_config, path
     else:
         log.info("Failed to load the default configuration file.")
-        exit(3)
+        sys.exit(3)
 
 
 def start_work(work_dict):
@@ -76,28 +76,29 @@ def control():
     parser.add_argument("--us", help="update source", action="store_true")
     parser.parse_args()
     if parser:
-        print(str(parser))
+        # print(str(parser))
+        pass
 
 
 def select_wd():
     # select working directory
     if 'src' in os.path.abspath('.'):
         os.chdir('./..')
-        print(os.path.abspath('.'))
+        # print(os.path.abspath('.'))
     else:
         dir_list = ['Logs', 'config', 'static', 'model']
         for index in dir_list:
             if index not in os.listdir():
                 print("Missing directories " + index)
-                exit(9)
+                sys.exit(9)
             else:
                 # work directory true
                 pass
 
 
 if __name__ == "__main__":
-    select_wd()
     # control()
+    select_wd()
     log = CustomLog().custom_log(level=logging.DEBUG)
     conf, app_path = initialize()
     check_network()

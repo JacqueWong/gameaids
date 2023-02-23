@@ -14,7 +14,7 @@ from lib.evade import *
 
 
 def mtp(template: str, action=1):
-    print("function mtp running...")
+    # print("function mtp running...")
     """
     match target position, default click
 
@@ -48,7 +48,6 @@ def mtp(template: str, action=1):
             if action == 0 and count < 0:
                 return False
             elif count < 0:
-                exit(10)
                 return False
             else:
                 count = count - 2
@@ -96,4 +95,4 @@ def full_mode():
     random_sleep(15)
     pag.getActiveWindow()
     pag.press('F11')
-    print("press F11")
+    # print("press F11")
