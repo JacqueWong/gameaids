@@ -14,6 +14,7 @@ import time
 
 class CustomLog:
     def __init__(self):
+        self.__log_dir = "Logs"
         self.__file_name = ''
         self.__date_format = "%Y-%m-%d"
         self.__log_format = '[%(asctime)s]' \
@@ -25,13 +26,12 @@ class CustomLog:
     # Determine whether the log file already exists, and if not, create a new file
     def __determine_log_file_exists(self):
         if not os.path.isfile(self.__file_name):
-            print(os.path.abspath(''))
             open(self.__file_name, mode='w', encoding="utf-8")
 
     # Log files are stored on a daily basis
     def __custom_log_file_name(self):
         today = time.strftime(self.__date_format, time.localtime())
-        self.__file_name = "../Logs/" + today + " .log"
+        self.__file_name = self.__log_dir + "/dxcb2-" + today + ".log"
 
     def custom_log(self, level=logging.INFO):
         logger = logging.getLogger(__name__)

@@ -12,15 +12,12 @@ import os
 
 
 class Config:
-    def __init__(self, config_path=None, mode='r'):
-        self.config_path = r'../config/config.ini'
-        if config_path is None:
-            config_path = self.config_path
-        if not os.path.isfile(config_path):
-            print("config file(" + config_path + ") not exist.")
-        if mode == 'r':
-            self.config_dict = {}
-            self.load_config()
+    def __init__(self):
+        self.config_path = 'config/config.ini'
+        if not os.path.isfile(self.config_path):
+            print("config file(" + self.config_path + ") not exist.")
+        self.config_dict = {}
+        self.load_config()
 
     def get_all_config(self):
         return self.config_dict

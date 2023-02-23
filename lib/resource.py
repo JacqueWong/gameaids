@@ -42,8 +42,8 @@ class Resource:
             "screenshot": "screenshot.png",
             "target": "target.png",
         }
-        self.res_root = '..\\static'
-        self.res_path = '..\\config\\source.json'
+        self.res_root = 'static'
+        self.res_path = 'config/source.json'
         self.update_res()
         self.res_dict = json.load(fp=open(self.res_path, mode='r'))
         self.res_list = fill_res_list(self.res_dict)
@@ -52,7 +52,7 @@ class Resource:
         """
         resource folder -> source.json
 
-        :param folder_path: default is static/
+        :param folder_path: default is static
 
         Raises: default save at config/source.json
         """
@@ -71,7 +71,8 @@ class Resource:
                 else:
                     temp_dict = dict.fromkeys(dirs)
                     if temp_dict:
-                        flag = root.split(os.sep)[2]
+                        spl = root.split(os.sep)
+                        flag = spl[len(spl) - 1]
             if temp_dict:
                 for key in temp_dict.keys():
                     if key in root:

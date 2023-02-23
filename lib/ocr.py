@@ -17,14 +17,15 @@ class OCR:
     def __init__(self):
         self.reader = easyocr.Reader(['ch_sim', 'en'],
                                      model_storage_directory=os.path.expanduser('~') + '\\.EasyOCR\\model',
+                                     # model_storage_directory='bin/model',
                                      download_enabled=False
                                      )
 
     def rtt(self):
         """
-        read target text -> [../static/target.png]
+        read target text -> [static/target.png]
         """
-        target_path = '../static/target.png'
+        target_path = 'static/target.png'
         if os.path.isfile(target_path):
             return self.reader.readtext(target_path)
         else:
@@ -32,9 +33,9 @@ class OCR:
 
     def rst(self):
         """
-        read screenshot text -> [../static/screenshot.png]
+        read screenshot text -> [static/screenshot.png]
         """
-        target_path = '../static/screenshot.png'
+        target_path = 'static/screenshot.png'
         if os.path.isfile(target_path):
             return self.reader.readtext(target_path)
         else:

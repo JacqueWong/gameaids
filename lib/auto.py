@@ -14,6 +14,7 @@ from lib.evade import *
 
 
 def mtp(template: str, action=1):
+    print("function mtp running...")
     """
     match target position, default click
 
@@ -27,14 +28,14 @@ def mtp(template: str, action=1):
     """
     # The number of times is used as the criterion for judging whether the click target will appear,
     # that is, 0 means that it may seem, and non-0 means that it will appear
-    screenshot_path = "../static/screenshot.png"
-    target_path = "../static/target.png"
+    screenshot_path = "static/screenshot.png"
+    target_path = "static/target.png"
     # If more than 10 times, the judgment target will not appear?
     count = 10
     # while count:
     while True:
         count = count - 1
-        random_sleep()
+        random_sleep(2)
         screenshot = pag.screenshot()
         screenshot.save(screenshot_path)
         position = matching_picture(template, screenshot_path)
@@ -85,7 +86,6 @@ def md(mode: str = None, index: list = None):
     elif mode == 'page_right':
         pag.dragRel(xOffset=-75, yOffset=0, duration=0.25)
     elif mode == 'btn':
-        index[0] = 200
         pag.dragRel(xOffset=200, yOffset=0, duration=0.25)
     else:
         if not index:
@@ -93,7 +93,7 @@ def md(mode: str = None, index: list = None):
 
 
 def full_mode():
-    random_sleep(10)
+    random_sleep(15)
     pag.getActiveWindow()
     pag.press('F11')
-    # print("press F11")
+    print("press F11")
