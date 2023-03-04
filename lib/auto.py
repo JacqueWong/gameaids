@@ -34,6 +34,7 @@ class Auto:
         self.action["res"] = res
         self.action["event"] = event
         self.action["para"] = para
+        print(self.action.copy())
         return self.action.copy()
 
     def do_action(self):
@@ -42,11 +43,17 @@ class Auto:
         if self.mtp(self.action["res"]):
             # match target
             if self.action["event"] == 1:
+                # click
+                # if (self.action["para"] == 0) mouse move only
                 pag.click(random_coordinates(self.position), clicks=self.action["para"])
                 print("click : " + self.action["res"])
             elif self.action["event"] == 2:
+                # drag
                 pag.moveTo(random_coordinates(self.position))
                 md(mode=self.action["para"])
+            elif self.action["event"] == 3:
+                # mouse move
+                pag.moveTo(random_coordinates(self.position))
             else:
                 return True
         else:
@@ -60,10 +67,12 @@ class Auto:
 
         :param template: res file path
         """
-        # print("function mtp running...")
+        print("function mtp running...")
         count = self.count
         while count:
             count -= 1
+            sleep(2)
+            print("count : " + str(count))
             pag.screenshot().save(self.screenshot_path)
             position = matching_picture(template, self.screenshot_path)
             # region value about (left, top, width , height)
@@ -73,6 +82,7 @@ class Auto:
                         position[1][1] - position[0][1]))
             target.save(self.target_path)
             if ensure_matching(target, template):
+                print("match true.")
                 self.position = position
                 return True
         return False

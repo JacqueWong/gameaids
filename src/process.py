@@ -17,6 +17,19 @@ class Process:
         self.auto = Auto()
         self.proc = []
 
+    def append_action(self, action: list):
+        print(action)
+        if type(action[0]) is list:
+            self.proc.extend(list(map(self.auto.build_action, *action)))
+        else:
+            self.proc.extend(list(map(self.auto.build_action, action)))
+
+    def action_handle(self, res_list: list, loop_count: int = 1):
+        temp = list(map(self.res.get, res_list * loop_count))
+        if loop_count != 1:
+            return temp, len(res_list) * loop_count
+        return temp
+
     def do_process(self):
         print("function do process")
         for index in self.proc:
@@ -25,20 +38,16 @@ class Process:
             self.auto.do_action()
 
     def open_game(self):
-        full_mode()
-        res = ['game_icon', 'update_OK', 'start_page']
-        event = [1] * 3
-        para = [1, 0, 0]
-        for index in list(map(self.auto.build_action, list(map(self.res.get, res)), event, para)):
-            self.proc.append(index)
+        print("function open game")
+        # full_mode()
+        self.append_action(self.action_handle(['game_icon', 'update_OK', 'start_page']))
 
     def gains_crucible(self):
-        res = ['crucible', 'ok']
-        self.proc.append(list(map(self.auto.build_action, list(map(self.res.get, res)))))
+        self.append_action(self.action_handle(['crucible', 'ok']))
 
-    # def gains_hourglass(self):
-    #     mtp(self.res.get('ok'))
-    #
+    def gains_hourglass(self):
+        self.append_action(self.action_handle(['ok']))
+
     # def gains_arena(self):
     #     temp = ['collapse_drop_down_box', 'arena_button']
     #     count = 3
@@ -90,20 +99,20 @@ class Process:
     #     temp_list = [1] * len(temp)
     #     _ = map(mtp, list(map(self.res.get, temp)), temp_list)
     #
-    # def manor_double_benefit(self):
-    #     mtp(self.res.get('expedition_button'), action=-1)
-    #     md(mode='page_right')
-    #     md(mode='page_right')
-    #     mtp(self.res.get('manor_button'))
-    #     count = 5
-    #     while count:
-    #         count = count - 1
-    #         mtp(self.res.get('double_benefits'))
-    #         mtp(self.res.get('ok'))
-    #     mtp(self.res.get('leave_3'))
-    #     mtp(self.res.get('manor_button'), action=-1)
-    #     md(mode='page_left')
-    #     md(mode='page_left')
+    def manor_double_benefit(self):
+        print("function mdb.")
+        target = self.action_handle(['expedition_button', 'expedition_button', 'manor_button'])
+        event = [2, 2, 1]
+        para = [101, 101, 1]
+        t, length = self.action_handle(['double_benefits', 'ok'], 5)
+        target.extend(t)
+        event.extend([1] * length)
+        para.extend([1] * length)
+        target.extend(self.action_handle(['leave_3', 'manor_button', 'manor_button']))
+        event.extend([1, 2, 2])
+        para.extend([1, 100, 100])
+        self.append_action([target, event, para])
+
     #
     # def church_personal_tasks(self):
     #     temp = ['church_button', 'parthenon', 'personal_tasks']
