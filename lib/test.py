@@ -8,5 +8,5 @@
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
 # @Desc    :
 
-test = ['static\\others\\game_icon.png', 'static\\others\\update_OK.png', 'static\\others\\start_page.png']
+
 

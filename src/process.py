@@ -11,42 +11,68 @@
 from lib import *
 
 
+# def init_data(func):
+#     # @init_data
+#     def wrapper(self, *args, **kwargs):
+#         if not hasattr(self, 'tgt'):
+#             self.tgt = []
+#         if not hasattr(self, 'evt'):
+#             self.evt = []
+#         if not hasattr(self, 'para'):
+#             self.para = []
+#         # if not hasattr(self, 'list4'):
+#         #     self.list4 = []
+#         return func(self, *args, **kwargs)
+#
+#     return wrapper
+
+
 class Process:
     def __init__(self):
         self.res = Resource()
         self.auto = Auto()
         self.proc = []
+        self.tgt = []
+        self.evt = []
+        self.para = []
 
-    def append_action(self, action: list):
-        print(action)
+    def data_handle(self, tgt: list, evt=None, para=None):
+        length = len(tgt)
+        if para is None:
+            para = [1] * length
+        if evt is None:
+            evt = [1] * length
+        self.tgt.extend(tgt)
+        self.evt.extend(evt)
+        self.para.extend(para)
+
+    def append_action(self):
+        action = [self.tgt.copy(), self.evt.copy(), self.evt.copy()]
         if type(action[0]) is list:
             self.proc.extend(list(map(self.auto.build_action, *action)))
         else:
             self.proc.extend(list(map(self.auto.build_action, action)))
 
     def action_handle(self, res_list: list, loop_count: int = 1):
-        temp = list(map(self.res.get, res_list * loop_count))
-        if loop_count != 1:
-            return temp, len(res_list) * loop_count
-        return temp
+        return list(map(self.res.get, res_list * loop_count))
 
     def do_process(self):
         print("function do process")
         for index in self.proc:
             print(index)
             self.auto.action = index
-            self.auto.do_action()
+            # self.auto.do_action()
 
-    def open_game(self):
-        print("function open game")
-        # full_mode()
-        self.append_action(self.action_handle(['game_icon', 'update_OK', 'start_page']))
-
-    def gains_crucible(self):
-        self.append_action(self.action_handle(['crucible', 'ok']))
-
-    def gains_hourglass(self):
-        self.append_action(self.action_handle(['ok']))
+    # def open_game(self):
+    #     print("function open game")
+    #     # full_mode()
+    #     self.append_action(self.action_handle(['game_icon', 'update_OK', 'start_page']))
+    #
+    # def gains_crucible(self):
+    #     self.append_action(self.action_handle(['crucible', 'ok']))
+    #
+    # def gains_hourglass(self):
+    #     self.append_action(self.action_handle(['ok']))
 
     # def gains_arena(self):
     #     temp = ['collapse_drop_down_box', 'arena_button']
@@ -101,17 +127,30 @@ class Process:
     #
     def manor_double_benefit(self):
         print("function mdb.")
-        target = self.action_handle(['expedition_button', 'expedition_button', 'manor_button'])
-        event = [2, 2, 1]
-        para = [101, 101, 1]
-        t, length = self.action_handle(['double_benefits', 'ok'], 5)
-        target.extend(t)
-        event.extend([1] * length)
-        para.extend([1] * length)
-        target.extend(self.action_handle(['leave_3', 'manor_button', 'manor_button']))
-        event.extend([1, 2, 2])
-        para.extend([1, 100, 100])
-        self.append_action([target, event, para])
+        # target = self.action_handle(['expedition_button', 'expedition_button', 'manor_button'])
+        # event = [2, 2, 1]
+        # para = [101, 101, 1]
+        # t = self.action_handle(['double_benefits', 'ok'], 5)
+        # target.extend(t)
+        # event.extend([1] * (len(t)))
+        # para.extend([1] * (len(t)))
+        # target.extend(self.action_handle(['leave_3', 'manor_button', 'manor_button']))
+        # event.extend([1, 2, 2])
+        # para.extend([1, 100, 100])
+        # self.append_action([target, event, para])
+
+        self.data_handle(
+            tgt=self.action_handle(['expedition_button', 'expedition_button', 'manor_button']),
+            evt=[2, 2, 1],
+            para=[101, 101, 1]
+        )
+        self.data_handle(tgt=self.action_handle(['double_benefits', 'ok'], 5))
+        self.data_handle(
+            tgt=self.action_handle(['leave_3', 'manor_button', 'manor_button']),
+            evt=[1, 2, 2],
+            para=[1, 100, 100]
+        )
+        self.append_action()
 
     #
     # def church_personal_tasks(self):
