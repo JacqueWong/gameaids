@@ -29,12 +29,11 @@ class Auto:
             # "remark": ""
         }
 
-    def build_action(self, res, event=1, para=1):
+    def build_action(self, res, event, para):
         self.action["step"] += 1
         self.action["res"] = res
         self.action["event"] = event
         self.action["para"] = para
-        print(self.action.copy())
         return self.action.copy()
 
     def do_action(self):
