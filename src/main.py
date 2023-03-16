@@ -67,7 +67,8 @@ def start_work(work_dict):
     for key, value in dict.items(work_dict):
         if value == 'on':
             print('process : ' + key)
-            exec('proc.' + key + '()')
+            exec('work.' + key + '()')
+    work.do_process()
 
 
 def control():
@@ -104,15 +105,16 @@ if __name__ == "__main__":
     check_network()
     load_process(conf)
 
-    proc = Process()
+    # proc = Process()
+    work = Work()
     # ca = ControlApp(app_path)
     # ca.open_app()
     # log.info("open application.")
-    # proc.open_game()
+    # work.open_game()
     # log.info("open game.")
     # log.info("start work")
     start_work(conf)
-    proc.do_process()
+    # proc.do_process()
 
     # ca.close_app()
     # log.debug("close application")
