@@ -62,13 +62,12 @@ def initialize():
 
 
 def start_work(work_dict):
-    # print(work_dict)
-    # Config().record_config(record)
     for key, value in dict.items(work_dict):
         if value == 'on':
             print('process : ' + key)
             exec('work.' + key + '()')
-    work.do_process()
+            work.p.init_data()
+    work.p.do_process()
 
 
 def control():

@@ -20,8 +20,12 @@ class Process:
         self.evt = []
         self.para = []
 
+    def init_data(self):
+        self.tgt = []
+        self.evt = []
+        self.para = []
+
     def parse_data(self, table: dict):
-        # print(table.keys())
         if "lc" in dict.keys(table):
             table["evt"] = None
             table["para"] = None
@@ -40,8 +44,8 @@ class Process:
 
     def data_handle(self, res: list, loop_count: int, evt, para):
         tgt = list(map(self.res.get, res * loop_count))
-        while False in tgt:
-            tgt.remove(False)
+        # while False in tgt:
+        #     tgt.remove(False)
         length = len(tgt)
         if para is None:
             para = [1] * length
@@ -59,3 +63,9 @@ class Process:
                 self.evt.copy(),
                 self.para.copy())))
 
+    def do_process(self):
+        print("function do process")
+        for index in self.proc:
+            print(index)
+            self.auto.action = index
+            # self.auto.do_action()

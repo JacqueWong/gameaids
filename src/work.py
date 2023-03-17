@@ -29,15 +29,7 @@ class Work:
         }
         '''
 
-    def do_process(self):
-        print("function do process")
-        for index in self.p.proc:
-            print(index)
-            self.p.auto.action = index
-            # self.auto.do_action()
-
     def open_game(self):
-        print("function open game")
         full_mode()
         table = {
             "res": ['game_icon', 'update_OK', 'start_page']
@@ -102,7 +94,7 @@ class Work:
             }
             self.p.parse_data(table)
             table = {
-                "res": 'expedition_button',
+                "res": ['expedition_button'],
                 "evt": [2],
                 "para": [110]
             }
@@ -142,7 +134,6 @@ class Work:
         self.p.parse_data(table)
 
     def manor_double_benefit(self):
-        print("function mdb.")
         table = {
             "res": ['expedition_button', 'expedition_button', 'manor_button'],
             "evt": [2, 2, 1],
