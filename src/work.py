@@ -54,7 +54,7 @@ class Work:
         }
         self.p.parse_data(table)
         table = {
-            "res": ['collapse_drop_down_box', 'arena_button'],
+            "res": ['reduce_times', 'ok'],
             "lc": 3
         }
         self.p.parse_data(table)

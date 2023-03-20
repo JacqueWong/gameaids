@@ -31,7 +31,7 @@ class Process:
             table["para"] = None
         else:
             table["lc"] = 1
-        if "evt" and "para " not in dict.keys(table):
+        if "evt" not in dict.keys(table):
             table["evt"] = None
             table["para"] = None
         self.data_handle(
@@ -65,7 +65,8 @@ class Process:
 
     def do_process(self):
         print("function do process")
+        # update_excel(self.proc)
         for index in self.proc:
             print(index)
-            self.auto.action = index
-            # self.auto.do_action()
+        #     self.auto.action = index
+        #     # self.auto.do_action()
