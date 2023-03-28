@@ -109,8 +109,6 @@ if __name__ == "__main__":
     # ca = ControlApp(app_path)
     # ca.open_app()
     # log.info("open application.")
-    # work.open_game()
-    # log.info("open game.")
     # log.info("start work")
     start_work(conf)
     # proc.do_process()
