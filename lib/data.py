@@ -13,8 +13,6 @@ import tomllib
 
 
 def load_data():
-    with open("./../config/data.toml", "rb") as f:
+    with open("config/data.toml", "rb") as f:
         return tomllib.load(f)
 
-
-print(load_data()["process"]["open_game"])

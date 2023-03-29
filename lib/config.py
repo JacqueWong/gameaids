@@ -7,43 +7,52 @@
 # @Software: PyCharm
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
 # @Desc    :
-import configparser
 import os
+import sys
+import tomllib
+
+
+def verify_keys(keys: list, table: dict):
+    for index in keys:
+        if index in table.keys():
+            pass
+        else:
+            print("config file verify failed. missing key <" + index + ">.")
+            sys.exit(100)
+
+
+def verify(config):
+    keys = ["meta", "path", "switch", "function"]
+    verify_keys(keys, config)
+
+    meta = config.get("meta")
+    if meta["name"] == "config" and meta["author"] == "Jacque":
+        pass
+    else:
+        print("config.meta verify failed. Please restore the default values")
+        sys.exit(101)
+
+    simulator_path = config["path"]["simulator"]
+    if not os.path.isfile(simulator_path):
+        print("simulator_path (" + simulator_path + ") not exist.")
+        sys.exit(102)
+
+    switch_keys = ['open_game', 'gains_hourglass', 'gains_crucible', 'manor_double_benefit',
+                   'church_personal_tasks', 'venture', 'gains_arena', 'market_purchases']
+    verify_keys(switch_keys, config["switch"])
+
+    funcs = ['OCR', 'record', 'log']
+    verify_keys(funcs, config["function"])
 
 
 class Config:
     def __init__(self):
-        self.config_path = 'config/config.ini'
+        self.config_path = 'config/config.toml'
         if not os.path.isfile(self.config_path):
             print("config file(" + self.config_path + ") not exist.")
-        self.config_dict = {}
-        self.load_config()
-
-    def get_all_config(self):
-        return self.config_dict
-
-    def get_config(self, section_name, key=None):
-        if not key:
-            return self.config_dict[section_name]
-        else:
-            return self.config_dict[section_name][key]
+        with open(self.config_path, "rb") as f:
+            self.config_dict = tomllib.load(f)
+        verify(self.config_dict)
 
     def load_config(self):
-        config = configparser.ConfigParser()
-        config.read(self.config_path, encoding='utf-8')
-        sections_list = list(config.sections())
-        self.config_dict = dict.fromkeys(sections_list)
-        for sec in sections_list:
-            options_list = list(config.options(section=sec))
-            temp_dict = dict.fromkeys(options_list)
-            for op in options_list:
-                temp_dict[op] = config.get(section=sec, option=op)
-            self.config_dict[sec] = temp_dict
-
-    def record_config(self, record_dict: dict):
-        cf = configparser.ConfigParser()
-        cf.add_section('record')
-        for key, value in dict.items(record_dict):
-            cf.set('record', key, value)
-        cf.write(open(self.config_path, 'w+'))
-        pass
+        return self.config_dict
