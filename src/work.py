@@ -14,14 +14,14 @@ so as to facilitate the subsequent unified processing of data sources
 
 TODO: add data form file or database
 """
-from lib import load_data
-from src import Process, full_mode
+from lib import Data
+from src import Process
 
 
 class Work:
     def __init__(self):
         self.p = Process()
-        self.data = load_data()
+        self.data = Data().load_process_data()
         '''
         self.table = {
             "res": [],
@@ -32,65 +32,62 @@ class Work:
         '''
 
     def add_action(self, table: dict):
-        self.p.parse_data(table)
+        self.p.parse_data(table.copy())
 
     def open_game(self):
-        full_mode()
-        self.add_action(self.data["process"]["open_game"])
+        self.add_action(self.data["open_game"])
 
     def gains_crucible(self):
-        self.add_action(self.data["process"]["gains_crucible"])
+        self.add_action(self.data["gains_crucible"])
 
     def gains_hourglass(self):
-        self.add_action(self.data["process"]["gains_hourglass"])
+        self.add_action(self.data["gains_hourglass"])
 
     def gains_arena(self):
-        temp = self.data["process"]["gains_arena"]
+        temp = self.data["gains_arena"]
         self.add_action(temp["begin"])
         self.add_action(temp["loop"])
         self.add_action(temp["end"])
 
     def venture(self):
-        self.add_action(self.data["process"]["venture"])
+        self.add_action(self.data["venture"])
         self.receive_proceeds()
         self.disassemble_equipment()
         self.start_venture()
 
     def start_venture(self):
-        temp = self.data["process"]["start_venture"]
+        temp = self.data["start_venture"]
         suit = temp["begin"]["suit"]
         team = temp["begin"]["team"]
-        res = temp["begin"]["res"]
-
+        tmp = temp["begin"]["res"].copy()
         count = 0
-        while count < 2:
-            t = res.copy()
-            i = t.index(res, "suit_index")
-            res[i] = suit[count]
-            i = t.index(res, "team_index")
-            res[i] = team[count]
-            self.add_action(t)
+        while count < 3:
+            i = tmp.index("suit_index")
+            temp["begin"]["res"][i] = suit[count]
+            i = tmp.index("team_index")
+            temp["begin"]["res"][i] = team[count]
+            self.add_action(temp["begin"])
             self.add_action(temp["drag"])
             self.add_action(temp["end"])
             count = count + 1
 
     def receive_proceeds(self):
-        temp = self.data["process"]["receive_proceeds"]
+        temp = self.data["receive_proceeds"]
         self.add_action(temp["begin"])
         self.add_action(temp["loop"])
         self.add_action(temp["end"])
 
     def disassemble_equipment(self):
-        self.add_action(self.data["process"]["disassemble_equipment"])
+        self.add_action(self.data["disassemble_equipment"])
 
     def manor_double_benefit(self):
-        temp = self.data["process"]["manor_double_benefit"]
+        temp = self.data["manor_double_benefit"]
         self.add_action(temp["begin"])
         self.add_action(temp["loop"])
         self.add_action(temp["end"])
 
     def church_personal_tasks(self):
-        temp = self.data["process"]["church_personal_tasks"]
+        temp = self.data["church_personal_tasks"]
         self.add_action(temp["begin"])
         self.add_action(temp["loop"])
         self.add_action(temp["end"])

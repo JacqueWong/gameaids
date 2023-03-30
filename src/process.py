@@ -26,21 +26,22 @@ class Process:
         self.para = []
 
     def parse_data(self, table: dict):
-        if "lc" in dict.keys(table):
-            table["evt"] = None
-            table["para"] = None
+        if "loop_count" in dict.keys(table):
+            table["event"] = None
+            table["parameter"] = None
         else:
-            table["lc"] = 1
-        if "evt" not in dict.keys(table):
-            table["evt"] = None
-            table["para"] = None
+            table["loop_count"] = 1
+        if "event" not in dict.keys(table):
+            table["event"] = None
+            table["parameter"] = None
         self.data_handle(
             res=table["res"],
-            loop_count=table["lc"],
-            evt=table["evt"],
-            para=table["para"]
+            loop_count=table["loop_count"],
+            evt=table["event"],
+            para=table["parameter"]
         )
         self.append_action()
+        self.init_data()
 
     def data_handle(self, res: list, loop_count: int, evt, para):
         tgt = list(map(self.res.get, res * loop_count))
@@ -62,6 +63,7 @@ class Process:
                 self.tgt.copy(),
                 self.evt.copy(),
                 self.para.copy())))
+        # print(len(self.proc.copy()))
 
     def do_process(self):
         print("function do process")
