@@ -67,8 +67,10 @@ class Process:
 
     def do_process(self):
         print("function do process")
-        # update_excel(self.proc)
-        for index in self.proc:
+        for index in last_record():
             print(index)
-        #     self.auto.action = index
-        #     # self.auto.do_action()
+            self.auto.action = index
+            # self.auto.do_action()
+
+    def update_record(self):
+        record(self.proc.copy())

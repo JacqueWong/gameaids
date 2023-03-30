@@ -18,9 +18,9 @@ from lib import Data
 from src import Process
 
 
-class Work:
+class Work(Process):
     def __init__(self):
-        self.p = Process()
+        super().__init__()
         self.data = Data().load_process_data()
         '''
         self.table = {
@@ -32,7 +32,7 @@ class Work:
         '''
 
     def add_action(self, table: dict):
-        self.p.parse_data(table.copy())
+        self.parse_data(table.copy())
 
     def open_game(self):
         self.add_action(self.data["open_game"])
@@ -94,9 +94,6 @@ class Work:
 
     def market_automatic_purchases(self):
         # TODO use ocr will be better?
-        pass
-
-    def submissions(self):
         pass
 
     def login(self):

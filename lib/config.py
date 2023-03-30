@@ -32,7 +32,7 @@ def verify(config):
         print("config.meta verify failed. Please restore the default values")
         sys.exit(101)
 
-    simulator_path = config["path"]["simulator"]
+    simulator_path = config["simulator"]["path"]
     if not os.path.isfile(simulator_path):
         print("simulator_path (" + simulator_path + ") not exist.")
         sys.exit(102)
@@ -52,7 +52,8 @@ class Config:
             print("config file(" + self.config_path + ") not exist.")
         with open(self.config_path, "rb") as f:
             self.config_dict = tomllib.load(f)
-        verify(self.config_dict)
+        # TODO verify by schema?
+        # verify(self.config_dict)
 
     def load_config(self):
         return self.config_dict
