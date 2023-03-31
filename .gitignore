@@ -4,3 +4,4 @@
 setup.*
 .idea/
 */__pycache__
+/dxcb2.egg-info

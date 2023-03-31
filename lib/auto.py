@@ -13,78 +13,92 @@ from lib.matching import *
 from lib.evade import *
 
 
-def mtp(template: str, action=1):
-    # print("function mtp running...")
-    """
-    match target position, default click
+class Auto:
+    def __init__(self):
+        self.screenshot_path = "static/screenshot.png"
+        self.target_path = "static/target.png"
+        self.position = []
+        self.count = 10
+        self.action = {
+            "step": 0,
+            "res": "",
+            "event": "",
+            "para": 1,
+            # "wt": 2,
+            # "evade": 10,
+            # "remark": ""
+        }
 
-    :param template: res file path
-    :param action: action after successful matching
+    def build_action(self, res, event, para):
+        self.action["step"] += 1
+        self.action["res"] = res
+        self.action["event"] = event
+        self.action["para"] = para
+        return self.action.copy()
 
-    Raises:
-        action > 1  -> click times                \n
-        action = 0  -> if target appears, click   \n
-        action = -1 -> target need to drag        \n
-    """
-    # The number of times is used as the criterion for judging whether the click target will appear,
-    # that is, 0 means that it may seem, and non-0 means that it will appear
-    screenshot_path = "static/screenshot.png"
-    target_path = "static/target.png"
-    # If more than 10 times, the judgment target will not appear?
-    count = 10
-    # while count:
-    while True:
-        count = count - 1
-        random_sleep(2)
-        screenshot = pag.screenshot()
-        screenshot.save(screenshot_path)
-        position = matching_picture(template, screenshot_path)
-        # region value about (left, top, width , height)
-        target = pag.screenshot(region=(position[0][0], position[0][1],
-                                        position[1][0] - position[0][0],
-                                        position[1][1] - position[0][1]))
-        target.save(target_path)
-        if ensure_matching(target, template) is False:
-            if action == 0 and count < 0:
-                return False
-            elif count < 0:
-                return False
+    def do_action(self):
+        # print("function do action")
+        # print("resource :" + str(self.action["res"]))
+        if self.mtp(self.action["res"]):
+            # match target
+            if self.action["event"] == 1:
+                # click
+                # if (self.action["para"] == 0) mouse move only
+                pag.click(random_coordinates(self.position), clicks=self.action["para"])
+                print("click : " + self.action["res"])
+            elif self.action["event"] == 2:
+                # drag
+                pag.moveTo(random_coordinates(self.position))
+                md(mode=self.action["para"])
+            elif self.action["event"] == 3:
+                # mouse move
+                pag.moveTo(random_coordinates(self.position))
             else:
-                count = count - 2
-                continue
+                return True
         else:
-            if action == 0:
-                action = action + 1
-        if action == -1:
-            pag.moveTo(random_coordinates(position))
-        else:
-            pag.click(random_coordinates(position), clicks=action)
-            print('click : ' + template)
-        # TODO write json file? record control process
-        # action list , about count/index/steps,click/drag button name/icon,times/length,range,mark
-        # action = [1, 'click', 'tavern_button', 1, [0, 0, 1, 1], 'Enter the tavern']
-        # maybe dict better than list
-        # action = {
-        #     'step': 1,
-        #     'event': 'click',
-        #     'target': 'tavern_button',
-        #     'parameter': 1,
-        #     'evade': 10,
-        #     'remarks': 'Enter the tavern'
-        # }
-        return True
+            if self.action["event"] == 1 and self.action["para"] == 0:
+                return True
+            return False
+
+    def mtp(self, template: str):
+        """
+        match target position
+
+        :param template: res file path
+        """
+        print("function mtp running...")
+        count = self.count
+        while count:
+            count -= 1
+            sleep(2)
+            # print("count : " + str(count))
+            pag.screenshot().save(self.screenshot_path)
+            position = matching_picture(template, self.screenshot_path)
+            # region value about (left, top, width , height)
+            target = pag.screenshot(
+                region=(position[0][0], position[0][1],
+                        position[1][0] - position[0][0],
+                        position[1][1] - position[0][1]))
+            target.save(self.target_path)
+            if ensure_matching(target, template):
+                print("match true.")
+                self.position = position
+                return True
+        return False
 
 
-def md(mode: str = None, index: list = None):
+def md(mode: int = None, index: list = None):
     """
     mouse drag
     """
-    sleep(2)
-    if mode == 'page_left':
+    if mode == 100:
+        # page_left
         pag.dragRel(xOffset=75, yOffset=0, duration=0.25)
-    elif mode == 'page_right':
+    elif mode == 101:
+        # page_right
         pag.dragRel(xOffset=-75, yOffset=0, duration=0.25)
-    elif mode == 'btn':
+    elif mode == 110:
+        # button
         pag.dragRel(xOffset=200, yOffset=0, duration=0.25)
     else:
         if not index:
@@ -92,7 +106,10 @@ def md(mode: str = None, index: list = None):
 
 
 def full_mode():
-    random_sleep(15)
+    """
+    set ActiveWindow full mode
+    """
+    random_sleep(10)
     pag.getActiveWindow()
     pag.press('F11')
     # print("press F11")

@@ -61,7 +61,7 @@ class Resource:
             folder_path = self.res_root
         if not os.path.isdir(folder_path):
             print("folder<" + folder_path + "> does not exist")
-            sys.exit(1)
+            sys.exit(4)
         image_path = {}
         temp_dict = {}
         flag = None

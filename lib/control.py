@@ -10,6 +10,8 @@
 
 import os
 
+from lib.auto import full_mode
+
 
 class ControlApp:
     def __init__(self, app_path: str = None):
@@ -22,6 +24,7 @@ class ControlApp:
     # start simulator
     def open_app(self):
         os.startfile(self.app_path)
+        full_mode()
 
     def close_app(self):
         os.system('%s%s' % ("taskkill /F /IM ", self.pr_name))
