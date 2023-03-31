@@ -8,12 +8,6 @@
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
 # @Desc    :
 
-"""
-The work class is added to separate the data processing and data sources of the process class,
-so as to facilitate the subsequent unified processing of data sources
-
-TODO: add data form file or database
-"""
 from lib import Data
 from src import Process
 

@@ -18,7 +18,7 @@ def verify_keys(keys: list, table: dict):
             pass
         else:
             print("config file verify failed. missing key <" + index + ">.")
-            sys.exit(100)
+            sys.exit(5)
 
 
 def verify(config):
@@ -30,12 +30,12 @@ def verify(config):
         pass
     else:
         print("config.meta verify failed. Please restore the default values")
-        sys.exit(101)
+        sys.exit(5)
 
     simulator_path = config["simulator"]["path"]
     if not os.path.isfile(simulator_path):
         print("simulator_path (" + simulator_path + ") not exist.")
-        sys.exit(102)
+        sys.exit(4)
 
     switch_keys = ['open_game', 'gains_hourglass', 'gains_crucible', 'manor_double_benefit',
                    'church_personal_tasks', 'venture', 'gains_arena', 'market_purchases']
@@ -50,6 +50,7 @@ class Config:
         self.config_path = 'config/config.toml'
         if not os.path.isfile(self.config_path):
             print("config file(" + self.config_path + ") not exist.")
+            sys.exit(4)
         with open(self.config_path, "rb") as f:
             self.config_dict = tomllib.load(f)
         # TODO verify by schema?
@@ -57,3 +58,11 @@ class Config:
 
     def load_config(self):
         return self.config_dict
+
+    def get_config(self, key: list):
+        tmp = self.config_dict
+        for index in key:
+            tmp = tmp[index]
+        return tmp
+
+    # TODO set config, about {time} table in <config.toml>

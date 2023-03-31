@@ -20,7 +20,7 @@ def verify(data: dict):
     # TODO add process key verify, maybe key from source file?
     else:
         print("verify data file <data.toml> failed.")
-        sys.exit(202)
+        sys.exit(5)
 
 
 class Data:

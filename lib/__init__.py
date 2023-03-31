@@ -6,7 +6,7 @@
 # @File    : __init__.py.py
 # @Software: PyCharm
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
-import src
+
 from lib.control import *
 from lib.custom_log import *
 from lib.config import *
@@ -15,7 +15,5 @@ from lib.auto import *
 from lib.evade import *
 from lib.data import *
 from lib.record import *
-
-log = src.log
 
 

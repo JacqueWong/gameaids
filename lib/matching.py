@@ -38,6 +38,9 @@ def matching_picture(template_path: str, screenshot_path: str):
 
 # The mean hash algorithm is used to calculate the similarity
 def calculate_distance(img1, img2):
+    """
+    The mean hash algorithm is used to calculate the similarity
+    """
     str1, str2 = get_hash(img1), get_hash(img2)
     if len(str1) != len(str2):
         return

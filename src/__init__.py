@@ -23,10 +23,22 @@ def select_wd():
         for index in dir_list:
             if index not in os.listdir():
                 print("Missing directories " + index)
-                sys.exit(9)
+                sys.exit(6)
             else:
                 # work directory true
                 pass
+
+
+def check_network():
+    ret = subprocess.run("ping baidu.com -n 1",
+                         shell=True,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    if ret.returncode:
+        print('network return code <' + str(ret.returncode) + '> connect failed.')
+        sys.exit(7)
+    # else:
+    #     log.info('connect network success.')
 
 
 def control():
@@ -39,19 +51,10 @@ def control():
         pass
 
 
-def check_network():
-    ret = subprocess.run("ping baidu.com -n 1",
-                         shell=True,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
-    if ret.returncode:
-        log.error('network return code <' + str(ret.returncode) + '> connect failed.')
-        sys.exit(4)
-    else:
-        log.info('connect network success.')
+select_wd()
 
+level = Config().get_config(["log", "level"])
+log = CustomLog().custom_log(level)
 
 # control()
 check_network()
-select_wd()
-log = CustomLog().custom_log(level=logging.DEBUG)

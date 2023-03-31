@@ -37,8 +37,8 @@ class Auto:
         return self.action.copy()
 
     def do_action(self):
-        print("function do action")
-        print("resource :" + str(self.action["res"]))
+        # print("function do action")
+        # print("resource :" + str(self.action["res"]))
         if self.mtp(self.action["res"]):
             # match target
             if self.action["event"] == 1:
@@ -71,7 +71,7 @@ class Auto:
         while count:
             count -= 1
             sleep(2)
-            print("count : " + str(count))
+            # print("count : " + str(count))
             pag.screenshot().save(self.screenshot_path)
             position = matching_picture(template, self.screenshot_path)
             # region value about (left, top, width , height)
@@ -106,7 +106,10 @@ def md(mode: int = None, index: list = None):
 
 
 def full_mode():
-    random_sleep(15)
+    """
+    set ActiveWindow full mode
+    """
+    random_sleep(10)
     pag.getActiveWindow()
     pag.press('F11')
     # print("press F11")

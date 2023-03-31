@@ -31,7 +31,7 @@ def initialize():
         return process_config, simulator_path
     else:
         log.info("Failed to load the default configuration file.")
-        sys.exit(3)
+        sys.exit(8)
 
 
 def start_work(work_dict, update=True):
@@ -39,9 +39,12 @@ def start_work(work_dict, update=True):
         for key, value in dict.items(work_dict):
             if value is True:
                 print('process : ' + key)
+                log.info("run process : " + key)
                 exec('work.' + key + '()')
                 work.init_data()
         work.update_record()
+        log.info("update record.")
+    log.info("do process.")
     work.do_process()
 
 
@@ -56,13 +59,13 @@ if __name__ == "__main__":
     load_process(conf)
 
     work = Work()
-    # ca = ControlApp(app_path)
-    # ca.open_app()
-    # log.info("open application.")
-    # log.info("start work")
+    ca = ControlApp(app_path)
+    ca.open_app()
+    log.info("open application.")
+    log.info("start work")
     start_work(conf)
 
-    # ca.close_app()
-    # log.debug("close application")
+    ca.close_app()
+    log.debug("close application")
     log.info("test main function finish.")
     # log.info("finish.")
