@@ -60,17 +60,18 @@ class Auto:
                 return True
             return False
 
-    def mtp(self, template: str):
+    def mtp(self, template: str, waiting: int = 2):
         """
         match target position
 
+        :param waiting: sleep time
         :param template: res file path
         """
-        print("function mtp running...")
+        # print("function mtp running...")
         count = self.count
         while count:
             count -= 1
-            sleep(2)
+            sleep(waiting)
             # print("count : " + str(count))
             pag.screenshot().save(self.screenshot_path)
             position = matching_picture(template, self.screenshot_path)
@@ -81,7 +82,7 @@ class Auto:
                         position[1][1] - position[0][1]))
             target.save(self.target_path)
             if ensure_matching(target, template):
-                print("match true.")
+                # print("match true.")
                 self.position = position
                 return True
         return False

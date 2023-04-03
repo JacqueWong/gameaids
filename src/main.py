@@ -54,6 +54,13 @@ def update_resource():
 
 
 if __name__ == "__main__":
+    select_wd()
+
+    level = Config().get_config(["log", "level"])
+    log = CustomLog().custom_log(level)
+
+    # control()
+    check_network()
     # update_resource()
     conf, app_path = initialize()
     load_process(conf)
