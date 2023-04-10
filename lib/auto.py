@@ -7,17 +7,18 @@
 # @Software: PyCharm
 # @Mail    : Jacquewong@stu.jluzh.edu.cn
 # @Desc    :
-
+import time
+import cv2 as cv
+import numpy as np
 import pyautogui as pag
-from lib.matching import *
 from lib.evade import *
 
 
 class Auto:
     def __init__(self):
-        self.screenshot_path = "static/screenshot.png"
-        self.target_path = "static/target.png"
+        self.TIMEOUT_MS = 10000
         self.position = []
+        self.threshold = 0.9
         self.count = 10
         self.action = {
             "step": 0,
@@ -43,7 +44,6 @@ class Auto:
             # match target
             if self.action["event"] == 1:
                 # click
-                # if (self.action["para"] == 0) mouse move only
                 pag.click(random_coordinates(self.position), clicks=self.action["para"])
                 print("click : " + self.action["res"])
             elif self.action["event"] == 2:
@@ -56,35 +56,41 @@ class Auto:
             else:
                 return True
         else:
-            if self.action["event"] == 1 and self.action["para"] == 0:
+            if self.action["event"] == 0 and self.action["para"] == 0:
                 return True
             return False
 
-    def mtp(self, template: str, waiting: int = 2):
+    def mtp(self, template_path: str, waiting: float = 0.8, reg: list = None):
         """
         match target position
 
+        :param template_path: resource file path
         :param waiting: sleep time
-        :param template: res file path
+        :param reg: pyautogui region
         """
-        # print("function mtp running...")
         count = self.count
+        start_time = time.time()
+        template_cv = cv.imdecode(np.fromfile(template_path, dtype=np.uint8), 1)
         while count:
             count -= 1
             sleep(waiting)
-            # print("count : " + str(count))
-            pag.screenshot().save(self.screenshot_path)
-            position = matching_picture(template, self.screenshot_path)
-            # region value about (left, top, width , height)
-            target = pag.screenshot(
-                region=(position[0][0], position[0][1],
-                        position[1][0] - position[0][0],
-                        position[1][1] - position[0][1]))
-            target.save(self.target_path)
-            if ensure_matching(target, template):
-                # print("match true.")
-                self.position = position
+            # Convert screenshot to OpenCV format
+            screenshot_cv = cv.cvtColor(np.array(pag.screenshot(region=reg)), cv.COLOR_RGB2BGR)
+            th, tw = template_cv.shape[:2]
+
+            result = cv.matchTemplate(screenshot_cv, template_cv, cv.TM_CCOEFF_NORMED)
+            # min_val, max_val, min_loc, max_loc
+            _, max_val, _, max_loc = cv.minMaxLoc(result)
+            # print(max_val)
+
+            if self.threshold < max_val:
+                self.position = [max_loc, (max_loc[0] + tw, max_loc[1] + th)]
+                # print(self.position)
                 return True
+
+            current_time = time.time()
+            if current_time - start_time > self.TIMEOUT_MS / 1000:
+                break
         return False
 
 
