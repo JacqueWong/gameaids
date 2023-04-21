@@ -2,43 +2,52 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/10/16 13:26
 # @Author  : Jacque
-# @Site    : 
-# @File    : __init__.py.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-import argparse
-import subprocess
+# @Mail    : Jacquewong1111@outlook.com
 
+import argparse
 from src.process import *
 from src.work import *
 
+# select working directory
+if 'src' in os.path.abspath('.'):
+    os.chdir('./..')
+    # print(os.path.abspath('.'))
+else:
+    dir_list = ['Logs', 'config', 'static']
+    for index in dir_list:
+        if index not in os.listdir():
+            log.error("Missing directories " + index)
+        else:
+            # work directory true
+            # print(os.path.abspath('.'))
+            pass
 
-def select_wd():
-    # select working directory
-    if 'src' in os.path.abspath('.'):
-        os.chdir('./..')
-        # print(os.path.abspath('.'))
-    else:
-        dir_list = ['Logs', 'config', 'static', 'model']
-        for index in dir_list:
-            if index not in os.listdir():
-                print("Missing directories " + index)
-                sys.exit(6)
-            else:
-                # work directory true
-                pass
+log = dlog(__name__)
 
 
-def check_network():
+def initialize():
+    """
+    load configuration from conf/conf.toml
+    """
+    log.debug("initialize...")
     ret = subprocess.run("ping baidu.com -n 1",
                          shell=True,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
     if ret.returncode:
-        print('network return code <' + str(ret.returncode) + '> connect failed.')
-        sys.exit(7)
-    # else:
-    #     log.info('connect network success.')
+        log.error('network return code <' + str(ret.returncode) + '> connect failed.')
+    else:
+        log.info('connect network success.')
+
+    default_conf: dict = Config().load_config()
+    if default_conf:
+        # TODO Verify the configuration file
+        log.info("load default config file success.")
+        simulator_path = default_conf['simulator']['path']
+        process_config: dict = default_conf["switch"]
+        return process_config, simulator_path
+    else:
+        log.error("Failed to load the default configuration file.")
 
 
 def control():
@@ -49,6 +58,3 @@ def control():
     if parser:
         # print(str(parser))
         pass
-
-
-
