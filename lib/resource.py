@@ -2,14 +2,10 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/11/30 10:20
 # @Author  : Jacque
-# @Site    : 
-# @File    : res.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
+# @Mail    : Jacquewong1111@outlook.com
+
 import json
 import os
-import sys
 
 
 def files_list_to_json(root, files: list):
@@ -40,8 +36,8 @@ class Resource:
             "name": "Image_path",
             "flag": True,
             "root": "static/",
-            "screenshot": "screenshot.png",
-            "target": "target.png",
+            # "screenshot": "screenshot.png",
+            # "target": "target.png",
         }
         self.res_root = 'static'
         self.res_path = 'config/source.json'
@@ -59,9 +55,9 @@ class Resource:
         """
         if folder_path is None:
             folder_path = self.res_root
-        if not os.path.isdir(folder_path):
-            print("folder<" + folder_path + "> does not exist")
-            sys.exit(4)
+        # if not os.path.isdir(folder_path):
+        #     print("folder<" + folder_path + "> does not exist")
+        #     sys.exit(4)
         image_path = {}
         temp_dict = {}
         flag = None

@@ -2,11 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/11/28 16:24
 # @Author  : Jacque
-# @Site    : 
-# @File    : process.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
+# @Mail    : Jacquewong1111@outlook.com
 
 from lib import *
 
@@ -21,9 +17,9 @@ class Process:
         self.para = []
 
     def init_data(self):
-        self.tgt = []
-        self.evt = []
-        self.para = []
+        self.tgt.clear()
+        self.evt.clear()
+        self.para.clear()
 
     def parse_data(self, table: dict):
         if "loop_count" in dict.keys(table):
@@ -63,12 +59,12 @@ class Process:
                 self.tgt.copy(),
                 self.evt.copy(),
                 self.para.copy())))
-        # print(len(self.proc.copy()))
+        log.debug("action number in process : " + str(len(self.proc.copy())))
 
     def do_process(self):
-        print("function do process")
+        log.info("function do process")
         for index in last_record():
-            # print(index)
+            log.debug(index)
             self.auto.action = index
             self.auto.do_action()
 
