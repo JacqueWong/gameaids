@@ -22,8 +22,6 @@ else:
             # print(os.path.abspath('.'))
             pass
 
-log = dlog(__name__)
-
 
 def initialize():
     """
@@ -58,3 +56,7 @@ def control():
     if parser:
         # print(str(parser))
         pass
+
+
+log = dlog(__name__)
+verify()

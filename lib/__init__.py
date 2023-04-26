@@ -12,5 +12,6 @@ from lib.auto import *
 from lib.evade import *
 from lib.data import *
 from lib.record import *
+from lib.verify import verify
 
 
