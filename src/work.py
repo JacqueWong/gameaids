@@ -11,7 +11,11 @@ from src import Process
 class Work(Process):
     def __init__(self):
         super().__init__()
-        self.data = Data().load_process_data()
+        data = Data()
+        form = data.load_data("form")
+        self.data = data.load_process_data()
+
+        self.init_data(form["non_essential"])
         '''
         self.table = {
             "res": [],

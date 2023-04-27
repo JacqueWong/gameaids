@@ -3,7 +3,7 @@
 # @Time    : 2022/11/26 18:29
 # @Author  : Jacque
 # @Mail    : Jacquewong1111@outlook.com
-
+import sys
 import time
 import cv2 as cv
 import numpy as np
@@ -19,8 +19,9 @@ class Auto:
     def __init__(self):
         self.TIMEOUT_MS = 10000
         self.position = []
+        self.non_essential = []
         self.threshold = 0.9
-        self.count = 10
+        self.count = 1
         self.action = {
             "step": 0,
             "res": "",
@@ -63,6 +64,10 @@ class Auto:
                 if self.action["event"] == 0 and self.action["para"] == 0:
                     log.info("event and para is 0.")
                     return True
+                elif self.action["res"].split('\\')[-1].split('.')[0] in self.non_essential:
+                    log.debug("Target " + self.action["res"] + " in non-essential list misses.")
+                else:
+                    pass
                 log.error("do action step<" + str(self.action["step"]) + "> failed.")
                 return False
         except ValueError:
@@ -86,7 +91,7 @@ class Auto:
         :param reg: pyautogui region
         """
         count = self.count
-        start_time = time.time()
+        # start_time = time.time()
         template_cv = cv.imdecode(np.fromfile(template_path, dtype=np.uint8), 1)
         th, tw = template_cv.shape[:2]
         log.debug("match <" + template_path + ">.")
@@ -95,7 +100,7 @@ class Auto:
             sleep(waiting)
             # Convert screenshot to OpenCV format
             screenshot_cv = cv.cvtColor(np.array(pag.screenshot(region=reg)), cv.COLOR_RGB2BGR)
-            result = cv.matchTemplate(screenshot_cv, template_cv, cv.TM_CCOEFF_NORMED)
+            result = cv.matchTemplate(screenshot_cv, template_cv, cv.TM_CCORR_NORMED)
             # min_val, max_val, min_loc, max_loc
             _, max_val, _, max_loc = cv.minMaxLoc(result)
             log.debug(str(count) + " max_val : " + str(max_val))
@@ -105,10 +110,10 @@ class Auto:
                 log.debug("match ture. target<" + template_path + ">, position : " + str(self.position))
                 return True
 
-            current_time = time.time()
-            if current_time - start_time > self.TIMEOUT_MS / 1000:
-                log.debug("Timeout exits the loop in mtp function.{TIMEOUT_MS}".format(TIMEOUT_MS=self.TIMEOUT_MS))
-                break
+            # current_time = time.time()
+            # if current_time - start_time > self.TIMEOUT_MS / 1000:
+            #     log.debug("Timeout exits the loop in mtp function.{TIMEOUT_MS}".format(TIMEOUT_MS=self.TIMEOUT_MS))
+            #     break
         return False
 
 
@@ -138,4 +143,5 @@ def full_mode():
     random_sleep(10)
     pag.getActiveWindow()
     pag.press('F11')
+    random_sleep(10)
     log.debug("press F11")

@@ -13,7 +13,7 @@ def start_work(work_dict, update=True):
             if value is True:
                 log.info("add process : " + key)
                 exec('work.' + key + '()')
-                work.init_data()
+                work.reinitialize_data()
         work.update_record()
         log.info("update record.")
     log.info("do process.")

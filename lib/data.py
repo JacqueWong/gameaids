@@ -12,8 +12,11 @@ class Data:
         with open("config/data.toml", "rb") as f:
             self.data = tomllib.load(f)
 
-    def load_data(self):
+    def load_all_data(self):
         return self.data
+
+    def load_data(self, key):
+        return self.data[key]
 
     def load_process_data(self):
         return self.data["process"]

@@ -16,7 +16,10 @@ class Process:
         self.evt = []
         self.para = []
 
-    def init_data(self):
+    def init_data(self, ne: list):
+        self.auto.non_essential = ne
+
+    def reinitialize_data(self):
         self.tgt.clear()
         self.evt.clear()
         self.para.clear()
@@ -37,7 +40,7 @@ class Process:
             para=table["parameter"]
         )
         self.append_action()
-        self.init_data()
+        self.reinitialize_data()
 
     def data_handle(self, res: list, loop_count: int, evt, para):
         tgt = list(map(self.res.get, res * loop_count))
