@@ -21,7 +21,7 @@ class Auto:
         self.position = []
         self.non_essential = []
         self.threshold = 0.9
-        self.count = 1
+        self.count = 10
         self.action = {
             "step": 0,
             "res": "",
@@ -82,7 +82,7 @@ class Auto:
             pass
     # Clean up any resources
 
-    def mtp(self, template_path: str, waiting: float = 0.8, reg: list = None):
+    def mtp(self, template_path: str, waiting: float = 1.8, reg: list = None):
         """
         match target position
 

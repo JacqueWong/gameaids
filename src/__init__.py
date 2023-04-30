@@ -39,8 +39,8 @@ def initialize():
 
     default_conf: dict = Config().load_config()
     if default_conf:
-        # TODO Verify the configuration file
         log.info("load default config file success.")
+        log.debug("config: " + str(default_conf))
         simulator_path = default_conf['simulator']['path']
         process_config: dict = default_conf["switch"]
         return process_config, simulator_path

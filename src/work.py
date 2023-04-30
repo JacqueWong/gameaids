@@ -12,10 +12,8 @@ class Work(Process):
     def __init__(self):
         super().__init__()
         data = Data()
-        form = data.load_data("form")
         self.data = data.load_process_data()
-
-        self.init_data(form["non_essential"])
+        self.init_data(data.load_data("form"))
         '''
         self.table = {
             "res": [],

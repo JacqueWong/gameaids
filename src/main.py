@@ -25,8 +25,8 @@ if __name__ == "__main__":
     conf, app_path = initialize()
 
     work = Work()
-    # ca = ControlApp(app_path)
-    # ca.open_app()
+    ca = ControlApp(app_path)
+    ca.open_app()
     log.info("open application.")
     log.info("start work")
     start_work(conf)

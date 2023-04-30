@@ -16,8 +16,11 @@ class Process:
         self.evt = []
         self.para = []
 
-    def init_data(self, ne: list):
-        self.auto.non_essential = ne
+    def init_data(self, form: dict):
+        self.auto.non_essential = form["non_essential"]
+        self.auto.TIMEOUT_MS = form["TIMEOUT_MS"]
+        self.auto.threshold = form["threshold"]
+        self.auto.count = form["count"]
 
     def reinitialize_data(self):
         self.tgt.clear()
