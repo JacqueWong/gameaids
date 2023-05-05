@@ -4,7 +4,7 @@
 # @Author  : Jacque
 # @Mail    : Jacquewong1111@outlook.com
 import sys
-import time
+# import time
 import cv2 as cv
 import numpy as np
 import pyautogui as pag
@@ -21,7 +21,7 @@ class Auto:
         self.position = []
         self.non_essential = []
         self.threshold = 0.9
-        self.count = 10
+        self.count = 20
         self.action = {
             "step": 0,
             "res": "",
@@ -66,10 +66,12 @@ class Auto:
                     return True
                 elif self.action["res"].split('\\')[-1].split('.')[0] in self.non_essential:
                     log.debug("Target " + self.action["res"] + " in non-essential list misses.")
+                    return True
                 else:
-                    pass
-                log.error("do action step<" + str(self.action["step"]) + "> failed.")
-                return False
+                    log.error("do action step<" + str(self.action["step"]) + "> failed.")
+                    # print("do action step<" + str(self.action["res"]) + "> failed.")
+                    sys.exit(520)
+                    # return False
         except ValueError:
             log.error("Invalid input <" + self.action["res"] + ">. Please enter a valid file path.")
         except TypeError:
@@ -82,7 +84,7 @@ class Auto:
             pass
     # Clean up any resources
 
-    def mtp(self, template_path: str, waiting: float = 1.8, reg: list = None):
+    def mtp(self, template_path: str, waiting: float = 0.5, reg: list = None):
         """
         match target position
 
@@ -104,6 +106,7 @@ class Auto:
             # min_val, max_val, min_loc, max_loc
             _, max_val, _, max_loc = cv.minMaxLoc(result)
             log.debug(str(count) + " max_val : " + str(max_val))
+            # print(str(count) + " max_val : " + str(max_val))
 
             if self.threshold < max_val:
                 self.position = [max_loc, (max_loc[0] + tw, max_loc[1] + th)]
@@ -138,10 +141,10 @@ def md(mode: int = None, index: list = None):
 
 def full_mode():
     """
-    set ActiveWindow full mode
+    set BlueStacks Window full mode
     """
-    random_sleep(10)
+    random_sleep(15)
     pag.getActiveWindow()
     pag.press('F11')
-    random_sleep(10)
+    random_sleep(5)
     log.debug("press F11")

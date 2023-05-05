@@ -31,6 +31,6 @@ if __name__ == "__main__":
     log.info("start work")
     start_work(conf)
 
-    # ca.close_app()
+    ca.close_app()
     log.info("close application")
     log.info("finish.")
