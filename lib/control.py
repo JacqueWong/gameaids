@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/11/23 18:36
 # @Author  : Jacque
-# @Site    : 
-# @File    : control.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
+# @Mail    : Jacquewong1111@outlook.com
 
-import os
 
 from lib.auto import full_mode
+
+import subprocess
 
 
 class ControlApp:
@@ -19,12 +16,14 @@ class ControlApp:
             self.app_path = r'C:\Program Files\BlueStacks_nxt_cn\HD-Player.exe'
         else:
             self.app_path = app_path
-        self.pr_name = 'HD-Player.exe'
+        self.proc = None
 
-    # start simulator
     def open_app(self):
-        os.startfile(self.app_path)
+        self.proc = subprocess.Popen(self.app_path)
         full_mode()
 
     def close_app(self):
-        os.system('%s%s' % ("taskkill /F /IM ", self.pr_name))
+        if self.proc is not None and self.proc.poll() is None:
+            self.proc.terminate()
+            self.proc.wait()
+        self.proc = None

@@ -2,24 +2,26 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/11/26 18:29
 # @Author  : Jacque
-# @Site    : 
-# @File    : auto.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
-import time
+# @Mail    : Jacquewong1111@outlook.com
+import sys
+# import time
 import cv2 as cv
 import numpy as np
 import pyautogui as pag
+
+from lib.log import dlog
 from lib.evade import *
+
+log = dlog(__name__)
 
 
 class Auto:
     def __init__(self):
         self.TIMEOUT_MS = 10000
         self.position = []
+        self.non_essential = []
         self.threshold = 0.9
-        self.count = 10
+        self.count = 20
         self.action = {
             "step": 0,
             "res": "",
@@ -35,32 +37,54 @@ class Auto:
         self.action["res"] = res
         self.action["event"] = event
         self.action["para"] = para
+        log.debug("build action. action : " + str(self.action.copy()))
         return self.action.copy()
 
     def do_action(self):
-        # print("function do action")
-        # print("resource :" + str(self.action["res"]))
-        if self.mtp(self.action["res"]):
-            # match target
-            if self.action["event"] == 1:
-                # click
-                pag.click(random_coordinates(self.position), clicks=self.action["para"])
-                print("click : " + self.action["res"])
-            elif self.action["event"] == 2:
-                # drag
-                pag.moveTo(random_coordinates(self.position))
-                md(mode=self.action["para"])
-            elif self.action["event"] == 3:
-                # mouse move
-                pag.moveTo(random_coordinates(self.position))
+        log.debug("function <do_action> : step :" + str(self.action["step"]))
+        try:
+            if self.mtp(self.action["res"]):
+                # match target ture
+                if self.action["event"] == 1:
+                    # click
+                    pag.click(random_coordinates(self.position), clicks=self.action["para"])
+                    log.info("click : " + self.action["res"])
+                elif self.action["event"] == 2:
+                    # drag
+                    pag.moveTo(random_coordinates(self.position))
+                    md(mode=self.action["para"])
+                elif self.action["event"] == 3:
+                    # mouse move
+                    pag.moveTo(random_coordinates(self.position))
+                else:
+                    # return True
+                    log.debug("event <" + self.action["event"] + "> not found.")
+                    pass
             else:
-                return True
+                if self.action["event"] == 0 and self.action["para"] == 0:
+                    log.info("event and para is 0.")
+                    return True
+                elif self.action["res"].split('\\')[-1].split('.')[0] in self.non_essential:
+                    log.debug("Target " + self.action["res"] + " in non-essential list misses.")
+                    return True
+                else:
+                    log.error("do action step<" + str(self.action["step"]) + "> failed.")
+                    # print("do action step<" + str(self.action["res"]) + "> failed.")
+                    sys.exit(520)
+                    # return False
+        except ValueError:
+            log.error("Invalid input <" + self.action["res"] + ">. Please enter a valid file path.")
+        except TypeError:
+            log.error("Invalid argument type. Please enter the correct type.")
+        except Exception as e:
+            log.critical("An error occurred:", e)
         else:
-            if self.action["event"] == 0 and self.action["para"] == 0:
-                return True
-            return False
+            return True
+        finally:
+            pass
+    # Clean up any resources
 
-    def mtp(self, template_path: str, waiting: float = 0.8, reg: list = None):
+    def mtp(self, template_path: str, waiting: float = 0.5, reg: list = None):
         """
         match target position
 
@@ -69,28 +93,30 @@ class Auto:
         :param reg: pyautogui region
         """
         count = self.count
-        start_time = time.time()
+        # start_time = time.time()
         template_cv = cv.imdecode(np.fromfile(template_path, dtype=np.uint8), 1)
+        th, tw = template_cv.shape[:2]
+        log.debug("match <" + template_path + ">.")
         while count:
             count -= 1
             sleep(waiting)
             # Convert screenshot to OpenCV format
             screenshot_cv = cv.cvtColor(np.array(pag.screenshot(region=reg)), cv.COLOR_RGB2BGR)
-            th, tw = template_cv.shape[:2]
-
-            result = cv.matchTemplate(screenshot_cv, template_cv, cv.TM_CCOEFF_NORMED)
+            result = cv.matchTemplate(screenshot_cv, template_cv, cv.TM_CCORR_NORMED)
             # min_val, max_val, min_loc, max_loc
             _, max_val, _, max_loc = cv.minMaxLoc(result)
-            # print(max_val)
+            log.debug(str(count) + " max_val : " + str(max_val))
+            # print(str(count) + " max_val : " + str(max_val))
 
             if self.threshold < max_val:
                 self.position = [max_loc, (max_loc[0] + tw, max_loc[1] + th)]
-                # print(self.position)
+                log.debug("match ture. target<" + template_path + ">, position : " + str(self.position))
                 return True
 
-            current_time = time.time()
-            if current_time - start_time > self.TIMEOUT_MS / 1000:
-                break
+            # current_time = time.time()
+            # if current_time - start_time > self.TIMEOUT_MS / 1000:
+            #     log.debug("Timeout exits the loop in mtp function.{TIMEOUT_MS}".format(TIMEOUT_MS=self.TIMEOUT_MS))
+            #     break
         return False
 
 
@@ -98,6 +124,7 @@ def md(mode: int = None, index: list = None):
     """
     mouse drag
     """
+    log.debug('run function mouse drag. mode : ' + str(mode))
     if mode == 100:
         # page_left
         pag.dragRel(xOffset=75, yOffset=0, duration=0.25)
@@ -114,9 +141,10 @@ def md(mode: int = None, index: list = None):
 
 def full_mode():
     """
-    set ActiveWindow full mode
+    set BlueStacks Window full mode
     """
-    random_sleep(10)
+    random_sleep(15)
     pag.getActiveWindow()
     pag.press('F11')
-    # print("press F11")
+    random_sleep(5)
+    log.debug("press F11")

@@ -2,18 +2,16 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/11/11 16:58
 # @Author  : Jacque
-# @Site    : 
-# @File    : __init__.py.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
+# @Mail    : Jacquewong1111@outlook.com
 
 from lib.control import *
-from lib.custom_log import *
+from lib.log import *
 from lib.config import *
 from lib.resource import *
 from lib.auto import *
 from lib.evade import *
 from lib.data import *
 from lib.record import *
+from lib.verify import verify
 
 

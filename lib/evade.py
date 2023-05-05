@@ -2,11 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/11/19 18:19
 # @Author  : Jacque
-# @Site    : 
-# @File    : evade.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
+# @Mail    : Jacquewong1111@outlook.com
 
 
 import random

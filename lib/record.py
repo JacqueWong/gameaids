@@ -2,11 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2023/3/30 15:10
 # @Author  : Jacque
-# @Site    : 
-# @File    : record.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
+# @Mail    : Jacquewong1111@outlook.com
 
 import json
 

@@ -2,11 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2023/3/12 13:38
 # @Author  : Jacque
-# @Site    : 
-# @File    : work.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
+# @Mail    : Jacquewong1111@outlook.com
 
 from lib import Data
 from src import Process
@@ -15,7 +11,9 @@ from src import Process
 class Work(Process):
     def __init__(self):
         super().__init__()
-        self.data = Data().load_process_data()
+        data = Data()
+        self.data = data.load_process_data()
+        self.init_data(data.load_data("form"))
         '''
         self.table = {
             "res": [],

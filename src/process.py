@@ -2,11 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/11/28 16:24
 # @Author  : Jacque
-# @Site    : 
-# @File    : process.py
-# @Software: PyCharm
-# @Mail    : Jacquewong@stu.jluzh.edu.cn
-# @Desc    :
+# @Mail    : Jacquewong1111@outlook.com
 
 from lib import *
 
@@ -20,10 +16,16 @@ class Process:
         self.evt = []
         self.para = []
 
-    def init_data(self):
-        self.tgt = []
-        self.evt = []
-        self.para = []
+    def init_data(self, form: dict):
+        self.auto.non_essential = form["non_essential"]
+        self.auto.TIMEOUT_MS = form["TIMEOUT_MS"]
+        self.auto.threshold = form["threshold"]
+        self.auto.count = form["count"]
+
+    def reinitialize_data(self):
+        self.tgt.clear()
+        self.evt.clear()
+        self.para.clear()
 
     def parse_data(self, table: dict):
         if "loop_count" in dict.keys(table):
@@ -41,7 +43,7 @@ class Process:
             para=table["parameter"]
         )
         self.append_action()
-        self.init_data()
+        self.reinitialize_data()
 
     def data_handle(self, res: list, loop_count: int, evt, para):
         tgt = list(map(self.res.get, res * loop_count))
@@ -63,12 +65,12 @@ class Process:
                 self.tgt.copy(),
                 self.evt.copy(),
                 self.para.copy())))
-        # print(len(self.proc.copy()))
+        log.debug("action number in process : " + str(len(self.proc.copy())))
 
     def do_process(self):
-        print("function do process")
+        log.info("function do process")
         for index in last_record():
-            # print(index)
+            log.debug(index)
             self.auto.action = index
             self.auto.do_action()
 
